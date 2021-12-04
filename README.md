@@ -1,7 +1,7 @@
 <h1 align="center">Hi 👋, I'm Royner Perez</h1>
 <h3 align="center">A passionate backend developer from Venezuela</h3>
 
-- 🔭 I’m currently working at [Asistensi](https://asistensi.com/)
+<!-- - 🔭 I’m currently working at [Asistensi](https://asistensi.com/) -->
 
 - 🌱 I’m currently learning **Python 🐍**
 
