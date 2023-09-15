@@ -1,0 +1,18 @@
+type: object
+properties:
+  title:
+    type: string
+  slug:
+    type: string
+  description:
+    type: string
+  content:
+    type: string
+  createAt:
+    type: string
+  updatedAt:
+    type: string
+  publishedAt:
+    type:
+      - string
+      - 'null'

@@ -1,0 +1,8 @@
+description: A server intercal error occurred.
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/Error.yaml
+    example:
+      message: Internal server error
+      error: unexpected_error

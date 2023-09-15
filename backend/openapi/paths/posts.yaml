@@ -114,29 +114,7 @@ post:
     201:
       description: |
         The request was successfully handled. A new Post was created.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              title:
-                type: string
-              author:
-                type: string
-              slug:
-                type: string
-              description:
-                type: string
-              content:
-                type: string
-              createAt:
-                type: string
-              updatedAt:
-                type: string
-              publishedAt:
-                type:
-                  - string
-                  - 'null'
+      $ref: ../components/responses/Post.yaml
     400:
       description: |
         There is something wrong with a field/s.
@@ -150,3 +128,36 @@ post:
           example:
             message: Internal server error
             error: unexpected_error
+
+get:
+  operationId: get-all-posts
+  summary: Get all posts
+  description: |
+    This operation gets all the existing posts.
+
+    the operation accepts a series of URL queries to manage pagination.
+
+    ### Query options
+
+    | option |   type   | default value |       possible values       |
+    |:------:|:--------:|:-------------:|:---------------------------:|
+    |  page  | `number` |       0       | 0-n \| `0 < n < page_count` |
+    |  limit | `number` |       5       |     5-n \| `5 < n <= 15`    |
+  parameters:
+    $ref: ../components/parameters/Pagination.yaml
+  responses:
+    200:
+      description: The request was successfully handled.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: ../components/schemas/Post.yaml
+    404:
+      $ref: ../components/responses/Error_400.yaml
+    500:
+      $ref: ../components/responses/Error_500.yaml

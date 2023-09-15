@@ -1,0 +1,6 @@
+description: |
+  The request was successfully handled.
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/Post.yaml
