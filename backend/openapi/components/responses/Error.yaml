@@ -1,0 +1,7 @@
+description: An error ocurred
+content:
+    application/json:
+      schema:
+        $ref: ../schemas/Error.yaml
+      example:
+        $ref: ../examples/Error.yaml

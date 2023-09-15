@@ -1,0 +1,38 @@
+
+openapi:  3.1.0
+info:
+  title: Yavurb
+  version: 0.1.0
+  summary: Yurb personal website's API
+  description: |
+    This is the OAS for yurb.dev website.
+
+    Here you can find the APIs used for retrieving the data displayed in the website, such as:
+
+      - Personal information
+      - Projects
+      - Posts
+  contact:
+    name: Royner Perez
+    url: yurb.dev
+  license:
+    name: MIT License
+    identifier: MIT
+    url: https://opensource.org/license/mit/
+servers:
+  - url: https://api.yurb.dev
+    description: Production's server
+
+paths:
+  /posts:
+    $ref: paths/posts.yaml
+
+components:
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: Bearer <jwt>
+
+security:
+  - jwt: []
