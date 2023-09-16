@@ -8,11 +8,17 @@ properties:
     type: string
   content:
     type: string
-  createAt:
+  status:
     type: string
-  updatedAt:
+    enum:
+      - editing
+      - active
+      - inactive
+  created_at:
     type: string
-  publishedAt:
+  updated_at:
+    type: string
+  published_at:
     type:
       - string
       - 'null'
