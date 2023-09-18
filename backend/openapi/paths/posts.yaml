@@ -143,6 +143,7 @@ get:
     |:------:|:--------:|:-------------:|:---------------------------:|
     |  page  | `number` |       0       | 0-n \| `0 < n < page_count` |
     |  limit | `number` |       5       |     5-n \| `5 < n <= 15`    |
+  security: []
   parameters:
     $ref: ../components/parameters/Pagination.yaml
   responses:

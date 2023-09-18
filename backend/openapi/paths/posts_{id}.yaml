@@ -1,0 +1,15 @@
+parameters:
+  $ref: ../components/parameters/ID.yaml
+get:
+  operationId: get-a-single-post
+  summary: Get a post
+  description: |
+    This operation retrieves a single post based on the ID passed.
+  security: []
+  responses:
+    200:
+      $ref: ../components/responses/Post.yaml
+    404:
+      $ref: ../components/responses/Error_400.yaml
+    500:
+      $ref: ../components/responses/Error_500.yaml
