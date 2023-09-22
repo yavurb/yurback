@@ -10,6 +10,6 @@ get:
     200:
       $ref: ../components/responses/Post.yaml
     404:
-      $ref: ../components/responses/Error_400.yaml
+      $ref: ../components/responses/Error_404.yaml
     500:
       $ref: ../components/responses/Error_500.yaml

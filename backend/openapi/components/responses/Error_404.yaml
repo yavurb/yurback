@@ -1,0 +1,28 @@
+description: The resource could not be found.
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        data:
+          oneOf:
+            - description: An empty array
+              type: array
+              items:
+                type: 'null'
+              maxItems: 0
+            - description: An empty object
+              type: object
+              properties: {}
+        message:
+          description: A human-readable message describing the error
+          type: string
+    examples:
+      empty_array:
+        value:
+          data: []
+          message: Resources could not be found.
+      empty_object:
+        value:
+          data: {}
+          message: Resources could not be found.
