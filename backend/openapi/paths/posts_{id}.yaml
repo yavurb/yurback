@@ -13,3 +13,22 @@ get:
       $ref: ../components/responses/Error_404.yaml
     500:
       $ref: ../components/responses/Error_500.yaml
+
+
+patch:
+  operationId: update-a-post
+  summary: Partially update a post
+  description:
+    This operation updates the given post with the fields specified in the body of the request
+  responses:
+    200:
+      $ref: ../components/responses/Post.yaml
+    400:
+      description: There is something wrong with a field.
+      $ref: ../components/responses/Error.yaml
+    401:
+      $ref: ../components/responses/Error_401.yaml
+    404:
+      $ref: ../components/responses/Error_404.yaml
+    500:
+      $ref: ../components/responses/Error_500.yaml
