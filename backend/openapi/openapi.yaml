@@ -23,6 +23,12 @@ servers:
   - url: https://api.yurb.dev
     description: Production's server
 
+tags:
+  - name: posts
+    description: Posts operations
+  - name: projects
+    description: Projects operations
+
 paths:
   /posts:
     $ref: paths/posts.yaml

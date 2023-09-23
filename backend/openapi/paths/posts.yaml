@@ -1,5 +1,7 @@
 post:
   operationId: create-post
+  tags:
+    - posts
   summary: Create a new Post
   description: |
     This operation creates a new Post in DB.
@@ -131,6 +133,8 @@ post:
 
 get:
   operationId: get-all-posts
+  tags:
+    - posts
   summary: Get all posts
   description: |
     This operation gets all the existing posts.

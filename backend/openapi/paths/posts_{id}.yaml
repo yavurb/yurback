@@ -2,6 +2,8 @@ parameters:
   $ref: ../components/parameters/ID.yaml
 get:
   operationId: get-a-single-post
+  tags:
+    - posts
   summary: Get a post
   description: |
     This operation retrieves a single post based on the ID passed.
@@ -17,6 +19,8 @@ get:
 
 patch:
   operationId: update-a-post
+  tags:
+    - posts
   summary: Partially update a post
   description:
     This operation updates the given post with the fields specified in the body of the request
@@ -36,6 +40,8 @@ patch:
 
 delete:
   operationId: delete-a-post
+  tags:
+    - posts
   summary: Logically delete a post
   description: This operation delete a post by deactivating it
   responses:
