@@ -32,3 +32,27 @@ patch:
       $ref: ../components/responses/Error_404.yaml
     500:
       $ref: ../components/responses/Error_500.yaml
+
+
+delete:
+  operationId: delete-a-post
+  summary: Logically delete a post
+  description: This operation delete a post by deactivating it
+  responses:
+    200:
+      description: Resource successfully deleted
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+          example:
+            message: Post deleted
+    401:
+      $ref: ../components/responses/Error_401.yaml
+    404:
+      $ref: ../components/responses/Error_404.yaml
+    500:
+      $ref: ../components/responses/Error_500.yaml
