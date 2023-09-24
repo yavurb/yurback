@@ -1,0 +1,7 @@
+description: Request successfully handled
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/Project.yaml
+    example:
+      $ref: ../examples/Project.yaml

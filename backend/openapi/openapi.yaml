@@ -35,6 +35,9 @@ paths:
   /posts/{id}:
     $ref: paths/posts_{id}.yaml
 
+  /projects:
+    $ref: paths/projects.yaml
+
 components:
   securitySchemes:
     jwt:
