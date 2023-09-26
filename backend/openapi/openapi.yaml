@@ -37,6 +37,8 @@ paths:
 
   /projects:
     $ref: paths/projects.yaml
+  /projects/{id}:
+    $ref: paths/projects_{id}.yaml
 
 components:
   securitySchemes:
