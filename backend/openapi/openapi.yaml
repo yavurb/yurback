@@ -28,6 +28,8 @@ tags:
     description: Posts operations
   - name: projects
     description: Projects operations
+  - name: uploads
+    description: Multimedia operations
 
 paths:
   /posts:
@@ -39,6 +41,9 @@ paths:
     $ref: paths/projects.yaml
   /projects/{id}:
     $ref: paths/projects_{id}.yaml
+
+  /uploads:
+    $ref: paths/uploads.yaml
 
 components:
   securitySchemes:
