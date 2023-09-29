@@ -2,9 +2,12 @@ type: object
 properties:
   id:
     type: number
+    readOnly: true
   title:
     type: string
   slug:
+    type: string
+  author:
     type: string
   description:
     type: string
@@ -16,11 +19,18 @@ properties:
       - editing
       - active
       - inactive
+    default: editing
   created_at:
     type: string
+    format: date-time
+    readOnly: true
   updated_at:
     type: string
+    format: date-time
+    readOnly: true
   published_at:
     type:
       - string
       - 'null'
+    format: date-time
+    readOnly: true

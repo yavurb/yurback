@@ -4,3 +4,5 @@ content:
   application/json:
     schema:
       $ref: ../schemas/Post.yaml
+    example:
+      $ref: ../examples/posts/response.yaml

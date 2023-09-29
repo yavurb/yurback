@@ -33,7 +33,10 @@ tags:
 
 paths:
   /posts:
-    $ref: paths/posts.yaml
+    post:
+      $ref: ./paths/posts/post.yaml
+    get:
+      $ref: ./paths/posts/get.yaml
   /posts/{id}:
     $ref: paths/posts_{id}.yaml
 
