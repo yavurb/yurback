@@ -17,6 +17,8 @@ responses:
     description: |
       There is something wrong with a field/s.
     $ref: ../../components/responses/Error.yaml
+  401:
+    $ref: ../../components/responses/Error_401.yaml
   500:
     description: A server intercal error occurred.
     content:
