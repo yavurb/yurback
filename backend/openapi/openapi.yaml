@@ -48,9 +48,19 @@ paths:
       $ref: ./paths/posts/{id}/delete.yaml
 
   /projects:
-    $ref: paths/projects.yaml
+    post:
+      $ref: ./paths/projects/post.yaml
+    get:
+      $ref: ./paths/projects/get.yaml
   /projects/{id}:
-    $ref: paths/projects_{id}.yaml
+    parameters:
+      $ref: ./components/parameters/ID.yaml
+    get:
+      $ref: ./paths/projects/{id}/get.yaml
+    patch:
+      $ref: ./paths/projects/{id}/patch.yaml
+    delete:
+      $ref: ./paths/projects/{id}/delete.yaml
 
   /uploads:
     $ref: paths/uploads.yaml

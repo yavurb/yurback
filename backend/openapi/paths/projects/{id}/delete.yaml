@@ -1,0 +1,14 @@
+operationId: delete-a-project
+tags:
+  - projects
+summary: Delete a project
+description: This operation delete a project by deactivating it
+responses:
+  204:
+    description: Resource successfully deleted
+  401:
+    $ref: ../../../components/responses/Error_401.yaml
+  404:
+    $ref: ../../../components/responses/Error_404.yaml
+  500:
+    $ref: ../../../components/responses/Error_500.yaml

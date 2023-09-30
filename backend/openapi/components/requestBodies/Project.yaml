@@ -3,4 +3,4 @@ content:
     schema:
       $ref: ../schemas/Project.yaml
     example:
-      $ref: ../examples/Project_requestBody.yaml
+      $ref: ../examples/projects/request.yaml
