@@ -48,7 +48,8 @@ post:
               file_name:
                 type: string
               uploaded_at:
-                type: integer
+                type: string
+                format: date-time
 
           example:
             id: 2
@@ -56,7 +57,7 @@ post:
             path: /images/my_image.png
             size: 28000
             file_name: my_image.png
-            uploaded_at: 927102600
+            uploaded_at: '2023-09-29T22:11:00Z'
     400:
       $ref: ../components/responses/Error.yaml
     401:
