@@ -67,10 +67,10 @@ paths:
 
 components:
   securitySchemes:
-    jwt:
+    JWT:
       type: http
       scheme: bearer
       bearerFormat: Bearer <jwt>
 
 security:
-  - jwt: []
+  - JWT: []
