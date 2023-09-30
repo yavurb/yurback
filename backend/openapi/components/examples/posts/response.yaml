@@ -1,0 +1,65 @@
+id: 1
+title: How to build a website 🤓👆
+author: Yurb, the developer
+slug: post-how-to-build-a-website
+description: This article discuses how to build a website
+content: |
+  ## Nice Title
+
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam posuere, sem at lobortis scelerisque, quam justo feugiat tellus, id tincidunt mi velit eu ligula. Vestibulum facilisis blandit efficitur. Quisque a accumsan magna. Nam non tortor laoreet dolor suscipit ullamcorper. Duis auctor eget lacus in dictum. Cras eget egestas libero. Vestibulum accumsan nisi est, vitae mattis odio malesuada vitae. Praesent convallis enim est, nec cursus augue tempus ac. Pellentesque ornare lobortis aliquam. Aliquam sed turpis suscipit, pharetra magna a, fermentum lectus. Sed pharetra sollicitudin nunc eu volutpat.
+
+  ### Pritty Subtitle
+
+  Mauris ultrices lectus ut quam mattis, vel maximus quam tincidunt. Vestibulum facilisis, nunc vitae fringilla condimentum, orci nunc faucibus dui, ut tincidunt orci lectus ut turpis. Nunc et condimentum ex. Integer pharetra malesuada elementum. Mauris vitae nisi consectetur, consectetur ipsum quis, pulvinar enim. Donec a porta neque. Ut tempus odio id odio gravida, pharetra rhoncus dolor dapibus. Phasellus ullamcorper urna mauris, sed elementum elit facilisis at.
+
+  ---
+
+  Suspendisse rhoncus dictum ex ut laoreet. Nunc laoreet malesuada mi eu pellentesque. Maecenas non magna suscipit, finibus risus in, consectetur nisi. Nam malesuada lacus nec enim consectetur volutpat. Morbi et quam diam. Integer quis arcu vel quam tristique congue ac in ex. Maecenas id nisi convallis, venenatis lacus sed, eleifend nulla. Integer fringilla, erat in lacinia tempus, purus diam tempor nunc, quis pharetra ligula metus quis erat. Donec pretium elit quis iaculis convallis. In hac habitasse platea dictumst. Praesent iaculis sem sed tellus vulputate, non facilisis ante blandit. Donec pellentesque dui sed justo venenatis, eu feugiat dolor auctor. Proin vel purus in lacus consectetur scelerisque non quis enim. Nunc ac dui bibendum, volutpat ante facilisis, feugiat ligula. Curabitur volutpat mi eget mi consectetur, et eleifend arcu dictum.
+
+  ```ts
+  import Layout from "@/layouts/Layout.astro";
+  import fetchApi from "@/lib/strapi";
+  import type Post from "@/interfaces/post";
+
+  import { Marked } from 'marked';
+  import { markedHighlight } from 'marked-highlight';
+  // import hljs from 'highlight.js';
+  import Prism from 'prismjs'
+  import loadLanguages from 'prismjs/components/';
+  loadLanguages(['py']);
+
+  import formatDate from "@/utils/formatDate";
+
+  export async function getStaticPaths() {
+    const posts = await fetchApi<Post[]>({
+    endpoint: 'posts',
+    wrappedByKey: 'data',
+  });;
+
+    return posts.map((post) => ({
+      params: { slug: post.attributes.slug },
+      props: post,
+    }));
+  }
+
+  type Props = Post;
+
+  const post = Astro.props;
+
+  const marked = new Marked(
+    markedHighlight({
+      langPrefix: 'language-',
+      highlight(code, lang) {
+        return Prism.highlight(code, Prism.languages[lang], lang);
+      }
+    })
+  );
+  const articleContent = marked.parse(post.attributes.content)
+  ```
+
+  > Note that whatever
+
+  ![A Roy card](https://cdn.yurb.dev/images/Roy_Arc_8061cae22e.png)
+created_at: 2023-05-19T00:00:00Z
+updated_at: 2023-05-19T00:00:00Z
+published_at: 2023-05-21T00:00:00Z

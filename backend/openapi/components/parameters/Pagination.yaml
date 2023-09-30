@@ -1,0 +1,11 @@
+- name: page
+  in: query
+  schema:
+    type: number
+  example:
+    2
+- name: limit
+  in: query
+  schema:
+    type: number
+  example: 5

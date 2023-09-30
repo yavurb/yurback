@@ -1,0 +1,8 @@
+description: User unauthorized to perform the action
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/Error.yaml
+    example:
+      message: User unauthorized
+      error: unauthorized_error

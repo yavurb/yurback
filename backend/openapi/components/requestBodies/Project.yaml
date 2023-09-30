@@ -1,0 +1,6 @@
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/Project.yaml
+    example:
+      $ref: ../examples/projects/request.yaml

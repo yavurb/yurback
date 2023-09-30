@@ -1,0 +1,76 @@
+
+openapi:  3.1.0
+info:
+  title: Yavurb
+  version: 0.1.0
+  summary: Yurb personal website's API
+  description: |
+    This is the OAS for yurb.dev website.
+
+    Here you can find the APIs used for retrieving the data displayed in the website, such as:
+
+      - Personal information
+      - Projects
+      - Posts
+  contact:
+    name: Royner Perez
+    url: https://yurb.dev
+  license:
+    name: MIT License
+    identifier: MIT
+    url: https://opensource.org/license/mit/
+servers:
+  - url: https://api.yurb.dev
+    description: Production's server
+
+tags:
+  - name: posts
+    description: Posts operations
+  - name: projects
+    description: Projects operations
+  - name: uploads
+    description: Multimedia operations
+
+paths:
+  /posts:
+    post:
+      $ref: ./paths/posts/post.yaml
+    get:
+      $ref: ./paths/posts/get.yaml
+  /posts/{id}:
+    parameters:
+      $ref: ./components/parameters/ID.yaml
+    get:
+      $ref: ./paths/posts/{id}/get.yaml
+    patch:
+      $ref: ./paths/posts/{id}/patch.yaml
+    delete:
+      $ref: ./paths/posts/{id}/delete.yaml
+
+  /projects:
+    post:
+      $ref: ./paths/projects/post.yaml
+    get:
+      $ref: ./paths/projects/get.yaml
+  /projects/{id}:
+    parameters:
+      $ref: ./components/parameters/ID.yaml
+    get:
+      $ref: ./paths/projects/{id}/get.yaml
+    patch:
+      $ref: ./paths/projects/{id}/patch.yaml
+    delete:
+      $ref: ./paths/projects/{id}/delete.yaml
+
+  /uploads:
+    $ref: paths/uploads.yaml
+
+components:
+  securitySchemes:
+    JWT:
+      type: http
+      scheme: bearer
+      bearerFormat: Bearer <jwt>
+
+security:
+  - JWT: []

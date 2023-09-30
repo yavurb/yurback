@@ -1,0 +1,18 @@
+data:
+  - id: 1
+    status: active
+    name: Amazing AWS Infrastructure
+    image: https://cdn.yurb.dev/some-image
+    url: https://some-project.yurb.dev
+    description: |
+      An amazing description for an amazing project
+
+      # I can use markdown 🐙!
+
+    tags:
+      - AWS
+      - IaC
+      - K8
+    post_id: 2
+    created_at: '2023-09-23T21:38:00Z'
+    updated_at: '2023-09-23T21:38:00Z'

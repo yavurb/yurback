@@ -1,0 +1,30 @@
+operationId: create-post
+tags:
+  - posts
+summary: Create a new Post
+description: |
+  This operation creates a new Post in DB.
+
+  You can assume that the operation will always return the new Post's information unless the enpoint returns a 4XX or 5XX status error code.
+requestBody:
+  $ref: ../../components/requestBodies/Post.yaml
+responses:
+  201:
+    description: |
+      The request was successfully handled. A new Post was created.
+    $ref: ../../components/responses/Post.yaml
+  400:
+    description: |
+      There is something wrong with a field/s.
+    $ref: ../../components/responses/Error.yaml
+  401:
+    $ref: ../../components/responses/Error_401.yaml
+  500:
+    description: A server intercal error occurred.
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/Error.yaml
+        example:
+          message: Internal server error
+          error: unexpected_error

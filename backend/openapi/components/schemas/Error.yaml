@@ -1,0 +1,8 @@
+type: object
+properties:
+  message:
+    description: A human-readable message describing the error
+    type: string
+  error:
+    description: The error type
+    type: string

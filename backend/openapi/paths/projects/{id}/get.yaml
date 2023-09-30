@@ -1,0 +1,14 @@
+operationId: get-a-single-project
+tags:
+  - projects
+summary: Get a project
+description: |
+  This operation retrieves a single project based on the ID passed.
+security: []
+responses:
+  200:
+    $ref: ../../../components/responses/Project.yaml
+  404:
+    $ref: ../../../components/responses/Error_404.yaml
+  500:
+    $ref: ../../../components/responses/Error_500.yaml

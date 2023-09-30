@@ -1,0 +1,28 @@
+operationId: get-projects
+tags:
+  - projects
+summary: Get projects
+description: |
+  This operation by default gets all the existing active projects.
+
+  It accepts a `filter` query option to retrive the projects with certain condition.
+responses:
+  200:
+    description: Request handled successfully.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: ../../components/schemas/Project.yaml
+        example:
+          $ref: ../../components/examples/projects/response-as-array.yaml
+  401:
+    $ref: ../../components/responses/Error_401.yaml
+  404:
+    $ref: ../../components/responses/Error_404.yaml
+  500:
+    $ref: ../../components/responses/Error_500.yaml

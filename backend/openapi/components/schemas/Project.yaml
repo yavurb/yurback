@@ -1,0 +1,47 @@
+type: object
+properties:
+  id:
+    type: number
+    readOnly: true
+  name:
+    type: string
+  image:
+    type: string
+    description: a URL to the project's image. Ideally, an image from a CDN.
+  url:
+    type: string
+    description: An URL to the public website/domain of the project.
+  description:
+    type: string
+    description: a short description of the project.
+  tags:
+    type: array
+    items:
+      type: string
+    description: |
+      An array of tags of which the project is related.
+  status:
+    type: string
+    enum:
+      - active
+      - inactive
+    default: active
+    description: You must use a PATCH operation pointing to the resource in order to change the value of the field.
+  post_id:
+    type: number
+    description: |
+      The post's ID.
+
+      If you have created a post detailing the project, use this field to link the post.
+  created_at:
+    type: string
+    readOnly: true
+  updated_at:
+    type: string
+    readOnly: true
+required:
+  - name
+  - image
+  - url
+  - description
+  - tags

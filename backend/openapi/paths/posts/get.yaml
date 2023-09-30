@@ -1,0 +1,36 @@
+operationId: get-all-posts
+tags:
+  - posts
+summary: Get all posts
+description: |
+  This operation gets all the existing posts.
+
+  the operation accepts a series of URL queries to manage pagination.
+
+  ### Query options
+
+  | option |   type   | default value |       possible values       |
+  |:------:|:--------:|:-------------:|:---------------------------:|
+  |  page  | `number` |       0       | 0-n \| `0 < n < page_count` |
+  |  limit | `number` |       5       |     5-n \| `5 < n <= 15`    |
+security: []
+parameters:
+  $ref: ../../components/parameters/Pagination.yaml
+responses:
+  200:
+    description: The request was successfully handled.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: ../../components/schemas/Post.yaml
+        example:
+          $ref: ../../components/examples/posts/response-as-array.yaml
+  404:
+    $ref: ../../components/responses/Error_404.yaml
+  500:
+    $ref: ../../components/responses/Error_500.yaml
