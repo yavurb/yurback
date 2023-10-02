@@ -10,7 +10,7 @@ class PostBase(BaseModel):
     title: str
     author: str
     slug: str
-    status: Status
+    status: Status = Status.editing
     description: str
     content: str
 
@@ -27,6 +27,6 @@ class Post(PostBase):
     id: int
     created_at: datetime
     updated_at: datetime
-    published_at: datetime
+    published_at: datetime | None
 
     model_config = ConfigDict(from_attributes=True)
