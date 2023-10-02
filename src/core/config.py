@@ -5,6 +5,8 @@ class Settings(BaseSettings):
     port: int = 8000
     environment: str = "dev"
 
+    database_uri: str
+
     model_config = SettingsConfigDict(env_file=".env")
 
 
