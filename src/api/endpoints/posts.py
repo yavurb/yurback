@@ -1,10 +1,11 @@
 from typing import Annotated
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
+import crud
 from database import deps
 from schemas import Post, PostCreate
-import crud
 
 router = APIRouter()
 
