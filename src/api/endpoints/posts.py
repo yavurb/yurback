@@ -21,3 +21,9 @@ def create_post(post: PostCreate, db: Annotated[Session, Depends(deps.get_db)]) 
 def get_posts(db: Annotated[Session, Depends(deps.get_db)]) -> ResponseAsList[Post]:
     posts = crud.post.get_multi(db)
     return {"data": posts}
+
+
+@router.get("/{id}")
+def get_post(id: int, db: Annotated[Session, Depends(deps.get_db)]) -> Post:
+    post = crud.post.get(db, id)
+    return post
