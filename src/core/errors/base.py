@@ -3,12 +3,6 @@ from starlette import status
 
 
 class BaseError(HTTPException):
-    """Raise an HTTP 400 Bad Request error
-
-    Args:
-        message (str): The message sent to the client
-    """
-
     def __init__(
         self,
         message: str = "",
