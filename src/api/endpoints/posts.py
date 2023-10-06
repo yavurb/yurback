@@ -36,3 +36,9 @@ def update_post(
     db_post = crud.post.get(db, id)
     updated_post = crud.post.update(db, db_obj=db_post, obj_in=post)
     return updated_post
+
+
+@router.delete("/{id}", status_code=204)
+def delete_post(id: int, db: Annotated[Session, Depends(deps.get_db)]) -> None:
+    crud.post.remove(db, id=id)
+    return None
