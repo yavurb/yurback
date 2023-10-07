@@ -5,7 +5,7 @@ from typing import Optional
 from sqlalchemy import DateTime, Enum, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column
 
-from database.base import Base
+from src.database.base import Base
 
 
 class Status(enum.Enum):
@@ -20,7 +20,7 @@ class Post(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, index=True)
     title: Mapped[str] = mapped_column(String(60))
     author: Mapped[str]
-    slug: Mapped[str]
+    slug: Mapped[str] = mapped_column(unique=True)
     status: Mapped[Status] = mapped_column(Enum(Status))
     description: Mapped[str]
     content: Mapped[str] = mapped_column(Text())
