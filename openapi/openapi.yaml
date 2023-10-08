@@ -22,6 +22,8 @@ info:
 servers:
   - url: https://api.yurb.dev
     description: Production's server
+  - url: http://localhost:8001
+    description: Local server
 
 tags:
   - name: posts
