@@ -1,0 +1,18 @@
+from typing import Annotated
+
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+
+from src.crud.project import project as crud
+from src.database.deps import get_db
+from src.schemas.project import Project, ProjectCreate
+
+router = APIRouter()
+
+
+@router.post("")
+def create_project(
+    project: ProjectCreate, db: Annotated[Session, Depends(get_db)]
+) -> Project:
+    created_project = crud.create(db, obj_in=project)
+    return created_project

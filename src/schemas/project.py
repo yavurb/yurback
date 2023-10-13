@@ -13,7 +13,7 @@ class ProjectBase(BaseModel):
     url: str
     description: str
     tags: list[str]
-    post_id: int
+    post_id: Optional[int] = None
 
 
 class ProjectCreate(ProjectBase):
@@ -27,7 +27,6 @@ class ProjectUpdate(ProjectBase):
     url: Optional[str] = None
     description: Optional[str] = None
     tags: Optional[list[str]] = None
-    post_id: Optional[int] = None
 
 
 class Project(ProjectBase):
