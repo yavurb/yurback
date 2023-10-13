@@ -38,3 +38,9 @@ def update_project(
     db_project = crud.get(db, id)
     updated_project = crud.update(db, obj_in=project, db_obj=db_project)
     return updated_project
+
+
+@router.delete("/{id}", status_code=204)
+def delete_project(id: int, db: Annotated[Session, Depends(get_db)]) -> None:
+    crud.remove(db, id=id)
+    return None
