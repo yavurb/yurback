@@ -11,13 +11,13 @@ from schemas.post import Post, PostCreate, PostUpdate
 router = APIRouter()
 
 
-@router.post("/")
+@router.post("")
 def create_post(post: PostCreate, db: Annotated[Session, Depends(deps.get_db)]) -> Post:
     post_created = crud.post.create(db, obj_in=post)
     return post_created
 
 
-@router.get("/")
+@router.get("")
 def get_posts(db: Annotated[Session, Depends(deps.get_db)]) -> ResponseAsList[Post]:
     posts = crud.post.get_multi(db)
     return {"data": posts}
