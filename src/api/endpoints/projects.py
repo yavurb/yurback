@@ -23,3 +23,9 @@ def create_project(
 def get_projects(db: Annotated[Session, Depends(get_db)]) -> ResponseAsList[Project]:
     projects = crud.get_multi(db)
     return {"data": projects}
+
+
+@router.get("/{id}")
+def get_project(id: int, db: Annotated[Session, Depends(get_db)]) -> Project:
+    project = crud.get(db, id)
+    return project
