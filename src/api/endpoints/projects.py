@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from src.crud.project import project as crud
 from src.database.deps import get_db
 from src.schemas.generics import ResponseAsList
-from src.schemas.project import Project, ProjectCreate
+from src.schemas.project import Project, ProjectCreate, ProjectUpdate
 
 router = APIRouter()
 
@@ -29,3 +29,12 @@ def get_projects(db: Annotated[Session, Depends(get_db)]) -> ResponseAsList[Proj
 def get_project(id: int, db: Annotated[Session, Depends(get_db)]) -> Project:
     project = crud.get(db, id)
     return project
+
+
+@router.patch("/{id}")
+def update_project(
+    project: ProjectUpdate, id: int, db: Annotated[Session, Depends(get_db)]
+) -> Project:
+    db_project = crud.get(db, id)
+    updated_project = crud.update(db, obj_in=project, db_obj=db_project)
+    return updated_project
