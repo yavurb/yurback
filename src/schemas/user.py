@@ -21,8 +21,12 @@ class UserUpdate(UserBase):
 
 
 class UserOut(BaseModel):
-    id: int
     token: str
+
+
+class UserSignIn(BaseModel):
+    username: str
+    password: str
 
 
 class User(UserBase):
