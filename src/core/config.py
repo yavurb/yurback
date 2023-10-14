@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     environment: str = "dev"
 
     database_uri: str
+    jwt_secret: str
 
     model_config = SettingsConfigDict(env_file=".env")
 

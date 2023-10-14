@@ -20,6 +20,11 @@ class UserUpdate(UserBase):
     password: Optional[str] = None
 
 
+class UserOut(BaseModel):
+    id: int
+    token: str
+
+
 class User(UserBase):
     id: int
     created_at: datetime
