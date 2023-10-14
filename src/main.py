@@ -7,7 +7,11 @@ from api import api_router
 from core.config import settings
 from core.errors.handlers import http_exception_handler, validation_exception_handler
 
-app = FastAPI(redoc_url="/docs", docs_url=None)
+app = FastAPI(
+    redoc_url="/docs",
+    docs_url=None,
+    title="Yurb",
+)
 
 
 @app.get("/")
