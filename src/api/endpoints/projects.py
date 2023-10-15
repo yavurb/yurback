@@ -33,7 +33,9 @@ def get_project(id: int, db: Annotated[Session, Depends(get_db)]) -> Project:
     return project
 
 
-@router.patch("/{id}")
+@router.patch(
+    "/{id}", dependencies=[Security(check_scopes, scopes=[Scope.UPDATE_PROJECT])]
+)
 def update_project(
     project: ProjectUpdate, id: int, db: Annotated[Session, Depends(get_db)]
 ) -> Project:
@@ -42,7 +44,11 @@ def update_project(
     return updated_project
 
 
-@router.delete("/{id}", status_code=204)
+@router.delete(
+    "/{id}",
+    status_code=204,
+    dependencies=[Security(check_scopes, scopes=[Scope.DELETE_PROJECT])],
+)
 def delete_project(id: int, db: Annotated[Session, Depends(get_db)]) -> None:
     crud.remove(db, id=id)
     return None
