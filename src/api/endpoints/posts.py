@@ -1,8 +1,10 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Security
 from sqlalchemy.orm import Session
 
+from src.core.auth.deps import check_scopes
+from src.core.auth.scopes import Scope
 from src.crud.post import post as crud
 from src.database.deps import get_db
 from src.schemas.generics import ResponseAsList
@@ -11,7 +13,7 @@ from src.schemas.post import Post, PostCreate, PostUpdate
 router = APIRouter()
 
 
-@router.post("")
+@router.post("", dependencies=[Security(check_scopes, scopes=[Scope.CREATE_POST])])
 def create_post(post: PostCreate, db: Annotated[Session, Depends(get_db)]) -> Post:
     post_created = crud.create(db, obj_in=post)
     return post_created
@@ -29,7 +31,9 @@ def get_post(id: int, db: Annotated[Session, Depends(get_db)]) -> Post:
     return post
 
 
-@router.patch("/{id}")
+@router.patch(
+    "/{id}", dependencies=[Security(check_scopes, scopes=[Scope.UPDATE_POST])]
+)
 def update_post(
     post: PostUpdate, id: int, db: Annotated[Session, Depends(get_db)]
 ) -> Post:
@@ -38,7 +42,11 @@ def update_post(
     return updated_post
 
 
-@router.delete("/{id}", status_code=204)
+@router.delete(
+    "/{id}",
+    status_code=204,
+    dependencies=[Security(check_scopes, scopes=[Scope.DELETE_POST])],
+)
 def delete_post(id: int, db: Annotated[Session, Depends(get_db)]) -> None:
     crud.remove(db, id=id)
     return None
