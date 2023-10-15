@@ -3,7 +3,7 @@ from typing import Optional
 
 from pydantic import BaseModel, ConfigDict
 
-from models.post import Status
+from src.models.post import Status
 
 
 class PostBase(BaseModel):
