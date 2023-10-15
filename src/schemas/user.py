@@ -31,6 +31,7 @@ class UserSignIn(BaseModel):
 
 class User(UserBase):
     id: int
+    scopes: list[str]
     created_at: datetime
     updated_at: datetime
 
