@@ -1,8 +1,10 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Security
 from sqlalchemy.orm import Session
 
+from src.core.auth.deps import check_scopes
+from src.core.auth.scopes import Scope
 from src.crud.project import project as crud
 from src.database.deps import get_db
 from src.schemas.generics import ResponseAsList
@@ -11,7 +13,7 @@ from src.schemas.project import Project, ProjectCreate, ProjectUpdate
 router = APIRouter()
 
 
-@router.post("")
+@router.post("", dependencies=[Security(check_scopes, scopes=[Scope.CREATE_PROJECT])])
 def create_project(
     project: ProjectCreate, db: Annotated[Session, Depends(get_db)]
 ) -> Project:
