@@ -18,7 +18,7 @@ def sign_up(user: UserCreate, db: Annotated[Session, Depends(get_db)]) -> UserOu
 
     created_user = crud.create(db, obj_in=user)
 
-    token = encode_token({"username": created_user.username, "id": created_user.id})
+    token = encode_token({"id": created_user.id, "username": created_user.username})
     return {"token": token}
 
 
@@ -28,5 +28,5 @@ def sign_in(user: UserSignIn, db: Annotated[Session, Depends(get_db)]) -> UserOu
     if not found_user:
         raise HTTPException(401, detail={"message": "Username or password incorrect"})
 
-    token = encode_token({"username": found_user.username, "id": found_user.id})
+    token = encode_token({"id": found_user.id, "username": found_user.username})
     return {"token": token}
