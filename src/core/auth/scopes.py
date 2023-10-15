@@ -9,3 +9,5 @@ class Scope(Enum):
     CREATE_PROJECT = "projects:create"
     UPDATE_PROJECT = "projects:update"
     DELETE_PROJECT = "projects:delete"
+
+    AUTH_CREATE = "auth:create"
