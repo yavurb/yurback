@@ -13,7 +13,9 @@ from src.schemas.user import UserCreate, UserOut, UserSignIn
 router = APIRouter()
 
 
-@router.post("/signup", dependencies=[Security(check_scopes, Scope.AUTH_CREATE)])
+@router.post(
+    "/signup", dependencies=[Security(check_scopes, scopes=[Scope.AUTH_CREATE])]
+)
 def sign_up(user: UserCreate, db: Annotated[Session, Depends(get_db)]) -> UserOut:
     hashed_password = hash_password(user.password)
     user.password = hashed_password
