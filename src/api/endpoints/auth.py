@@ -3,9 +3,8 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Security, status
 from sqlalchemy.orm import Session
 
-from src.core.auth import encode_token, hash_password
+from src.core.auth import encode_token, hash_password, scope
 from src.core.auth.deps import check_scopes
-from src.core.auth.scopes import Scope
 from src.crud.user import user as crud
 from src.database.deps import get_db
 from src.schemas.user import UserCreate, UserOut, UserSignIn
@@ -14,7 +13,8 @@ router = APIRouter()
 
 
 @router.post(
-    "/signup", dependencies=[Security(check_scopes, scopes=[Scope.AUTH_CREATE])]
+    "/signup",
+    dependencies=[Security(check_scopes, scopes=[scope.AUTH_CREATE])],
 )
 def sign_up(user: UserCreate, db: Annotated[Session, Depends(get_db)]) -> UserOut:
     hashed_password = hash_password(user.password)
