@@ -27,7 +27,7 @@ def get_posts(db: Annotated[Session, Depends(get_db)]) -> ResponseAsList[Post]:
 
 @router.get("/{id}")
 def get_post(id: int, db: Annotated[Session, Depends(get_db)]) -> Post:
-    post = crud.get(db, id)
+    post = crud.get_by_id(db, id)
     return post
 
 
@@ -37,7 +37,7 @@ def get_post(id: int, db: Annotated[Session, Depends(get_db)]) -> Post:
 def update_post(
     post: PostUpdate, id: int, db: Annotated[Session, Depends(get_db)]
 ) -> Post:
-    db_post = crud.post.get(db, id)
+    db_post = crud.get_by_id(db, id)
     updated_post = crud.update(db, db_obj=db_post, obj_in=post)
     return updated_post
 

@@ -29,7 +29,7 @@ def get_projects(db: Annotated[Session, Depends(get_db)]) -> ResponseAsList[Proj
 
 @router.get("/{id}")
 def get_project(id: int, db: Annotated[Session, Depends(get_db)]) -> Project:
-    project = crud.get(db, id)
+    project = crud.get_by_id(db, id)
     return project
 
 
@@ -39,7 +39,7 @@ def get_project(id: int, db: Annotated[Session, Depends(get_db)]) -> Project:
 def update_project(
     project: ProjectUpdate, id: int, db: Annotated[Session, Depends(get_db)]
 ) -> Project:
-    db_project = crud.get(db, id)
+    db_project = crud.get_by_id(db, id)
     updated_project = crud.update(db, obj_in=project, db_obj=db_project)
     return updated_project
 

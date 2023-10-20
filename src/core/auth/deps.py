@@ -41,7 +41,7 @@ def get_current_user(
     payload: Annotated[TokenPayload, Depends(decode_token)],
     db: Annotated[Session, Depends(get_db)],
 ) -> User:
-    user = user_crud.get(db, payload["id"])
+    user = user_crud.get_by_id(db, payload["id"])
     return user
 
 
