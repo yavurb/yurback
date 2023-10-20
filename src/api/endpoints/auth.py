@@ -10,13 +10,21 @@ from src.database.deps import get_db
 from src.schemas.user import UserCreate, UserOut, UserSignIn
 
 router = APIRouter()
+DBSession = Annotated[Session, Depends(get_db)]
 
 
 @router.post(
     "/signup",
     dependencies=[Security(check_scopes, scopes=[scope.AUTH_CREATE])],
 )
-def sign_up(user: UserCreate, db: Annotated[Session, Depends(get_db)]) -> UserOut:
+def sign_up(user: UserCreate, db: DBSession) -> UserOut:
+    username_exists = crud.get_by_username(db, user.username)
+    if username_exists:
+        raise HTTPException(
+            status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail={"message": "Username already exists"},
+        )
+
     hashed_password = hash_password(user.password)
     user.password = hashed_password
 
@@ -27,7 +35,7 @@ def sign_up(user: UserCreate, db: Annotated[Session, Depends(get_db)]) -> UserOu
 
 
 @router.post("/signin")
-def sign_in(user: UserSignIn, db: Annotated[Session, Depends(get_db)]) -> UserOut:
+def sign_in(user: UserSignIn, db: DBSession) -> UserOut:
     found_user = crud.authenticate(db, user.username, user.password)
     if not found_user:
         raise HTTPException(
