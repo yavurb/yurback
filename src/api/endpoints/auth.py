@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Security
+from fastapi import APIRouter, Depends, HTTPException, Security, status
 from sqlalchemy.orm import Session
 
 from src.core.auth import encode_token, hash_password
@@ -30,7 +30,10 @@ def sign_up(user: UserCreate, db: Annotated[Session, Depends(get_db)]) -> UserOu
 def sign_in(user: UserSignIn, db: Annotated[Session, Depends(get_db)]) -> UserOut:
     found_user = crud.authenticate(db, user.username, user.password)
     if not found_user:
-        raise HTTPException(401, detail={"message": "Username or password incorrect"})
+        raise HTTPException(
+            status.HTTP_401_UNAUTHORIZED,
+            detail={"message": "Username or password incorrect"},
+        )
 
     token = encode_token({"id": found_user.id, "username": found_user.username})
     return {"token": token}
