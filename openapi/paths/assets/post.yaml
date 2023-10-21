@@ -1,0 +1,61 @@
+operationId: upload-asset
+summary: Upload an asset
+tags:
+  - assets
+description: |
+  This operation uploads a file to a s3 bucket.
+
+  Based on the subtype's MIME type of the file, it will be stored in specific path.
+
+  | MIME type | root folder |
+  |:---------:|:-----------:|
+  | `image/*` |  `/images`  |
+requestBody:
+  required: true
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        properties:
+          file:
+            type: string
+            format: binary
+      example:
+        file: |
+          ----WebKitFormBoundary7MA4YWxkTrZu0gW
+          Content-Disposition: form-data; name="file"; filename="example.txt"
+          Content-Type: text/plain
+
+          [Contents of the file go here]
+          ----WebKitFormBoundary7MA4YWxkTrZu0gW--
+responses:
+  201:
+    description: File uploaded
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            id:
+              type: integer
+            file_name:
+              type: string
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+        example:
+          id: 2
+          file_name: my_image.png
+          created_at: '2023-09-29T22:11:00Z'
+          updated_at: '2023-09-29T22:11:00Z'
+  422:
+    $ref: ../../components/responses/Error.yaml
+  401:
+    $ref: ../../components/responses/Error_401.yaml
+  403:
+    $ref: ../../components/responses/Error_403.yaml
+  500:
+    $ref: ../../components/responses/Error_500.yaml

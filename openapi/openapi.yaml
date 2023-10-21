@@ -1,4 +1,3 @@
-
 openapi:  3.1.0
 info:
   title: Yavurb
@@ -12,6 +11,7 @@ info:
       - Personal information
       - Projects
       - Posts
+      - Assets
   contact:
     name: Royner Perez
     url: https://yurb.dev
@@ -22,15 +22,13 @@ info:
 servers:
   - url: https://api.yurb.dev
     description: Production's server
-  - url: http://localhost:8001
-    description: Local server
 
 tags:
   - name: posts
     description: Posts operations
   - name: projects
     description: Projects operations
-  - name: uploads
+  - name: assets
     description: Multimedia operations
 
 paths:
@@ -64,8 +62,9 @@ paths:
     delete:
       $ref: ./paths/projects/{id}/delete.yaml
 
-  /uploads:
-    $ref: paths/uploads.yaml
+  /assets:
+    post:
+      $ref: ./paths/assets/post.yaml
 
 components:
   securitySchemes:
