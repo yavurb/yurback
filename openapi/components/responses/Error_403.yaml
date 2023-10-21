@@ -1,0 +1,7 @@
+description: User do not have enough permission
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/Error.yaml
+    example:
+      message: Not enough permissions
