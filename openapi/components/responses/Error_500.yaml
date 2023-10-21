@@ -5,4 +5,3 @@ content:
       $ref: ../schemas/Error.yaml
     example:
       message: Internal server error
-      error: unexpected_error

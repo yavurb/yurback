@@ -5,4 +5,3 @@ content:
       $ref: ../schemas/Error.yaml
     example:
       message: User unauthorized
-      error: unauthorized_error
