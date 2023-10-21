@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, TypedDict
 
 from pydantic import BaseModel, ConfigDict
 
@@ -36,3 +36,10 @@ class User(UserBase):
     updated_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class QuerySchema(TypedDict, total=False):
+    id: int
+    username: str
+    emil: str
+    disabled: bool

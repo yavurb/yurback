@@ -1,4 +1,4 @@
-from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
+from typing import Any, Dict, Generic, List, Optional, Type, TypedDict, TypeVar, Union
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
@@ -10,9 +10,10 @@ from src.database.base import Base
 ModelType = TypeVar("ModelType", bound=Base)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
 UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
+QuerySchemaType = TypeVar("QuerySchemaType", bound=TypedDict)
 
 
-class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
+class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType, QuerySchemaType]):
     def __init__(self, model: Type[ModelType]):
         """
         CRUD object with default methods to Create, Read, Update, Delete (CRUD).
@@ -26,6 +27,10 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
     def get_by_id(self, db: Session, id: Any) -> Optional[ModelType]:
         return db.get(self.model, id)
+
+    def get(self, db: Session, query: QuerySchemaType):
+        stmt = select(self.model).filter_by(**query).limit(1)
+        return db.execute(stmt).scalar()
 
     def get_multi(
         self, db: Session, *, skip: int = 0, limit: int = 100

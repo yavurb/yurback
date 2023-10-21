@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, TypedDict
 
 from pydantic import BaseModel, ConfigDict
 
@@ -36,3 +36,11 @@ class Post(PostBase):
     published_at: datetime | None
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class QuerySchema(TypedDict, total=False):
+    id: int
+    title: str
+    author: str
+    slug: str
+    status: Status

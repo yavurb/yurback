@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, TypedDict
 
 from pydantic import BaseModel, ConfigDict
 
@@ -35,3 +35,9 @@ class Project(ProjectBase):
     updated_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class QuerySchema(TypedDict, total=False):
+    id: int
+    name: str
+    status: Status
