@@ -1,22 +1,24 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, status
+from fastapi import APIRouter, Depends, HTTPException, Security, UploadFile, status
 from sqlalchemy.orm import Session
 
+from src.core.auth import scope
+from src.core.auth.deps import check_scopes
 from src.crud.asset import asset as crud
 from src.database.deps import get_db
 from src.lib.storage import Storage
-from src.schemas.asset import CreateAsset
+from src.schemas.asset import AssetOut, CreateAsset
 
 router = APIRouter()
 
 
-@router.post("")
+@router.post("", dependencies=[Security(check_scopes, scopes=[scope.ASSET_CREATE])])
 def upload_file(
     file: UploadFile,
     db: Annotated[Session, Depends(get_db)],
     storage: Annotated[Storage, Depends(Storage)],
-):  # TODO: add return type
+) -> AssetOut:
     is_uploaded, file_key = storage.upload(file.filename, file.file)
 
     if not is_uploaded:

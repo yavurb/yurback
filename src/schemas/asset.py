@@ -28,3 +28,8 @@ class Asset(BaseAsset):
 class QuerySchema(TypedDict, total=False):
     id: int
     mimetype: str
+
+
+class AssetOut(BaseModel):
+    id: int
+    filename: str

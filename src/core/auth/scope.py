@@ -17,3 +17,5 @@ UPDATE_PROJECT = "projects:update"
 DELETE_PROJECT = "projects:delete"
 
 AUTH_CREATE = "auth:create"
+
+ASSET_CREATE = "assets:create"
