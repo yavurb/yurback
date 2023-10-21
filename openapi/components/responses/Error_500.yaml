@@ -1,4 +1,4 @@
-description: A server intercal error occurred.
+description: A server internal error occurred.
 content:
   application/json:
     schema:
