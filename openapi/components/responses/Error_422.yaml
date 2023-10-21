@@ -1,0 +1,7 @@
+description: Unable to process the request. User should change the request parameters.
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/Error.yaml
+    example:
+      message: Slug must be unique
