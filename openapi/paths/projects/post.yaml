@@ -11,11 +11,11 @@ requestBody:
 responses:
   201:
     $ref: ../../components/responses/Project.yaml
-  400:
-    description: |
-      There is something wrong with a field/s.
-    $ref: ../../components/responses/Error.yaml
   401:
     $ref: ../../components/responses/Error_401.yaml
+  403:
+    $ref: ../../components/responses/Error_403.yaml
+  422:
+    $ref: ../../components/responses/Error_422.yaml
   500:
     $ref: ../../components/responses/Error_500.yaml

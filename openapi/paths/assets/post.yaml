@@ -51,11 +51,11 @@ responses:
           file_name: my_image.png
           created_at: '2023-09-29T22:11:00Z'
           updated_at: '2023-09-29T22:11:00Z'
-  422:
-    $ref: ../../components/responses/Error.yaml
   401:
     $ref: ../../components/responses/Error_401.yaml
   403:
     $ref: ../../components/responses/Error_403.yaml
+  422:
+    $ref: ../../components/responses/Error.yaml
   500:
     $ref: ../../components/responses/Error_500.yaml

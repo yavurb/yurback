@@ -20,8 +20,6 @@ responses:
                 $ref: ../../components/schemas/Project.yaml
         example:
           $ref: ../../components/examples/projects/response-as-array.yaml
-  401:
-    $ref: ../../components/responses/Error_401.yaml
   404:
     $ref: ../../components/responses/Error_404.yaml
   500:
