@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Security
+from fastapi import APIRouter, Depends, HTTPException, Security, status
 from sqlalchemy.orm import Session
 
 from src.core.auth import scope
@@ -15,6 +15,13 @@ router = APIRouter()
 
 @router.post("", dependencies=[Security(check_scopes, scopes=[scope.CREATE_POST])])
 def create_post(post: PostCreate, db: Annotated[Session, Depends(get_db)]) -> Post:
+    post_exists = crud.get(db, {"slug": post.slug})
+
+    if post_exists:
+        raise HTTPException(
+            status.HTTP_422_UNPROCESSABLE_ENTITY, {"message": "Slug must be unique"}
+        )
+
     post_created = crud.create(db, obj_in=post)
     return post_created
 
