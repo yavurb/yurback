@@ -12,6 +12,8 @@ from src.schemas.post import Post, PostCreate, PostUpdate
 
 router = APIRouter()
 
+NOT_FOUND_MESSAGE = "Post not found"
+
 
 @router.post("", dependencies=[Security(check_scopes, scopes=[scope.CREATE_POST])])
 def create_post(post: PostCreate, db: Annotated[Session, Depends(get_db)]) -> Post:
@@ -35,6 +37,10 @@ def get_posts(db: Annotated[Session, Depends(get_db)]) -> ResponseAsList[Post]:
 @router.get("/{id}")
 def get_post(id: int, db: Annotated[Session, Depends(get_db)]) -> Post:
     post = crud.get_by_id(db, id)
+
+    if not post:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, {"message": NOT_FOUND_MESSAGE})
+
     return post
 
 
@@ -45,6 +51,10 @@ def update_post(
     post: PostUpdate, id: int, db: Annotated[Session, Depends(get_db)]
 ) -> Post:
     db_post = crud.get_by_id(db, id)
+
+    if not db_post:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, {"message": NOT_FOUND_MESSAGE})
+
     updated_post = crud.update(db, db_obj=db_post, obj_in=post)
     return updated_post
 
@@ -55,5 +65,10 @@ def update_post(
     dependencies=[Security(check_scopes, scopes=[scope.DELETE_POST])],
 )
 def delete_post(id: int, db: Annotated[Session, Depends(get_db)]) -> None:
+    post = crud.get_by_id(db, id)
+
+    if not post:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, {"message": NOT_FOUND_MESSAGE})
+
     crud.remove(db, id=id)
     return None
