@@ -16,6 +16,7 @@ DBSession = Annotated[Session, Depends(get_db)]
 @router.post(
     "/signup",
     dependencies=[Security(check_scopes, scopes=[scope.AUTH_CREATE])],
+    status_code=status.HTTP_201_CREATED,
 )
 def sign_up(user: UserCreate, db: DBSession) -> UserOut:
     username_exists = crud.get_by_username(db, user.username)
@@ -34,7 +35,7 @@ def sign_up(user: UserCreate, db: DBSession) -> UserOut:
     return {"token": token}
 
 
-@router.post("/signin")
+@router.post("/signin", status_code=status.HTTP_200_OK)
 def sign_in(user: UserSignIn, db: DBSession) -> UserOut:
     found_user = crud.authenticate(db, user.username, user.password)
     if not found_user:
