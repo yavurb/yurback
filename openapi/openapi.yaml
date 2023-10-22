@@ -12,6 +12,7 @@ info:
       - Projects
       - Posts
       - Assets
+      - Auth
   contact:
     name: Royner Perez
     url: https://yurb.dev
@@ -30,8 +31,17 @@ tags:
     description: Projects operations
   - name: assets
     description: Multimedia operations
+  - name: auth
+    description: Authentication operations
 
 paths:
+  /auth/signup:
+    post:
+      $ref: ./paths/auth/signup/post.yaml
+  /auth/signin:
+    post:
+      $ref: ./paths/auth/signin/post.yaml
+
   /posts:
     post:
       $ref: ./paths/posts/post.yaml

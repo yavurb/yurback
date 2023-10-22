@@ -1,0 +1,21 @@
+operationId: get-user-token
+tags:
+  - auth
+summary: SingIn
+description: Log in an existing user. Return a sign credential to use on other operations.
+security: []
+requestBody:
+  $ref: ../../../components/requestBodies/SignIn.yaml
+responses:
+  200:
+    description: |
+      The request was successfully handled. The user is authenticated.
+    $ref: ../../../components/responses/Authentication.yaml
+  401:
+    $ref: ../../../components/responses/Error_401.yaml
+  403:
+    $ref: ../../../components/responses/Error_403.yaml
+  422:
+    $ref: ../../../components/responses/Error_422.yaml
+  500:
+    $ref: ../../../components/responses/Error_500.yaml

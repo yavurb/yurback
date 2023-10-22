@@ -1,0 +1,8 @@
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/SignUp.yaml
+    example:
+      username: wanito
+      password: RandomPassword123.
+      email: illwanito@testmail.com

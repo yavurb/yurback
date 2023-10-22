@@ -1,0 +1,23 @@
+operationId: create-user
+tags:
+  - auth
+summary: SingUp
+description: |
+  This operation creates a new User in DB.
+
+  The user need to have the correct scope to perform this operation.
+requestBody:
+  $ref: ../../../components/requestBodies/SignUp.yaml
+responses:
+  201:
+    description: |
+      The request was successfully handled. A new User was created.
+    $ref: ../../../components/responses/Authentication.yaml
+  401:
+    $ref: ../../../components/responses/Error_401.yaml
+  403:
+    $ref: ../../../components/responses/Error_403.yaml
+  422:
+    $ref: ../../../components/responses/Error_422.yaml
+  500:
+    $ref: ../../../components/responses/Error_500.yaml

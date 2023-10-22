@@ -1,0 +1,7 @@
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/SignIn.yaml
+    example:
+      username: wanito
+      password: RandomPassword123.
