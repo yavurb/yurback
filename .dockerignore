@@ -1,0 +1,6 @@
+.pdm-python
+.git
+.venv
+.env.template
+.DS_Store
+openapi

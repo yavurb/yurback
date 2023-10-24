@@ -34,4 +34,4 @@ if __name__ == "__main__":
 
     dev_mode = True if environment == "dev" else False
 
-    uvicorn.run("main:app", port=port, reload=dev_mode)
+    uvicorn.run("main:app", port=port, reload=dev_mode, host="0.0.0.0")
