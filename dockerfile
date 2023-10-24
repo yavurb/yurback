@@ -1,4 +1,6 @@
-FROM python:3.11-alpine
+ARG python=python:3.11-alpine
+
+FROM ${python} as build
 
 RUN apk update \
     && apk add gcc musl-dev \
@@ -8,12 +10,19 @@ RUN apk update \
 RUN pip install -U pip setuptools wheel
 RUN pip install pdm
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY ["pyproject.toml", "pdm.lock", "./"]
-RUN pdm sync
+RUN pdm sync --prod --no-editable
 
-COPY . .
+FROM ${python}
 
-EXPOSE 8001
-CMD [ "pdm", "run", "start" ]
+RUN apk add libpq-dev
+
+WORKDIR /app
+
+COPY --from=build --chown=python:python /app/.venv .venv
+COPY ["start.sh", ".env", "./"]
+COPY src/ src/
+
+CMD ["sh", "start.sh"]
