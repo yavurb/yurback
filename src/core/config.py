@@ -9,9 +9,9 @@ class Settings(BaseSettings):
     jwt_secret: str
 
     # AWS
-    aws_access_key_id: str
-    aws_secret_access_key: str
-    aws_s3_bucket: str
+    aws_access_key_id: str | None = None
+    aws_secret_access_key: str | None = None
+    aws_s3_bucket: str | None = None
 
     model_config = SettingsConfigDict(env_file=".env")
 
