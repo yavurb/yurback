@@ -32,8 +32,3 @@ dependencies = [
     "boto3>=1.28.63",
     "python-multipart>=0.0.6",
 ]
-
-# Alembic - migrations commands
-db_revision = "alembic revision --autogenerate -m"
-db_upgrade = "alembic upgrade head"
-db_downgrade = "alembic downgrade -1"
