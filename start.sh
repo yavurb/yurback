@@ -1,6 +1,4 @@
 #! /bin/sh
 
-export PYTHONPATH=$(pwd)/
-
 source ./.venv/bin/activate
-python src/main.py
+uvicorn src.main:app --host "0.0.0.0" --port 8910

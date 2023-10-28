@@ -5,6 +5,19 @@ description = ""
 authors = [
     {name = "Yurb", email = "yavurb@gmail.com"},
 ]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+
+[tool.pdm.scripts]
+start = "sh start.sh"
+dev = "uvicorn src.main:app --host '0.0.0.0' {args:--port 8910} --reload"
+
+# Alembic - migrations commands
+db_revision = "alembic revision --autogenerate -m"
+db_upgrade = "alembic upgrade head"
+db_downgrade = "alembic downgrade -1"
+
 dependencies = [
     "fastapi>=0.103.2",
     "uvicorn[standard]>=0.23.2",
@@ -19,13 +32,6 @@ dependencies = [
     "boto3>=1.28.63",
     "python-multipart>=0.0.6",
 ]
-requires-python = ">=3.11"
-readme = "README.md"
-license = {text = "MIT"}
-
-[tool.pdm.scripts]
-_.env_file = ".env"
-start = "sh ./start.sh"
 
 # Alembic - migrations commands
 db_revision = "alembic revision --autogenerate -m"
