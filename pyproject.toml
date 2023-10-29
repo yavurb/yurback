@@ -23,6 +23,12 @@ dependencies = [
     "python-multipart>=0.0.6",
 ]
 
+[tool.pdm.dev-dependencies]
+dev = [
+    "pytest>=7.4.3",
+    "httpx>=0.25.0",
+]
+
 [tool.pdm.scripts]
 start = "sh start.sh"
 dev = "uvicorn src.main:app --host '0.0.0.0' {args:--port 8910} --reload"
@@ -31,3 +37,8 @@ dev = "uvicorn src.main:app --host '0.0.0.0' {args:--port 8910} --reload"
 db_revision = "alembic revision --autogenerate -m"
 db_upgrade = "alembic upgrade head"
 db_downgrade = "alembic downgrade -1"
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]
