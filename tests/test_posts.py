@@ -1,8 +1,9 @@
-from typing import Any, Callable
+from typing import Any, Generator
 
 from fastapi.testclient import TestClient
 from pytest import MonkeyPatch, fixture
 
+from src.core.auth.deps import check_scopes
 from src.crud.post import post as CRUD
 from src.main import app
 from src.models.post import Post
@@ -23,27 +24,65 @@ def post() -> dict[str, Any]:
         "content": "## Nice Title",
         "created_at": "2023-10-27T15:58:51.928350",
         "updated_at": "2023-10-28T16:58:51.928350",
-        "published_at": "2023-10-28T18:58:51.928350",
+        "published_at": None,
     }
 
 
 @fixture
-def post_models(post) -> Callable[[Any], list[Post]]:
+def post_models(post) -> list[Post]:
     def make_instances(post_data: dict[str, Any]) -> Post:
         return Post(**post_data)
 
-    return lambda _db: (list(map(make_instances, [post])))
+    return list(map(make_instances, [post]))
+
+
+@fixture
+def override_auth() -> Generator[None, None, None]:
+    default_root_user = {
+        "id": 1,
+        "username": "rootuser",
+    }
+
+    def override_check_scopes():
+        return default_root_user
+
+    app.dependency_overrides[check_scopes] = override_check_scopes
+
+    yield None
+
+    app.dependency_overrides = {}
 
 
 class TestGetPost:
     def test_should_return_all_posts(
         self,
-        post,
-        post_models,
+        post: dict[str, Any],
+        post_models: list[Post],
         monkeypatch: MonkeyPatch,
     ):
-        monkeypatch.setattr(CRUD, "get_multi", post_models)
+        monkeypatch.setattr(CRUD, CRUD.get_multi.__name__, lambda _db: post_models)
 
         response = client.get(BASE_PATH)
 
         assert response.json() == {"data": [post]}
+
+
+class TestCreatePost:
+    def test_should_create_post(
+        self,
+        post,
+        post_models,
+        override_auth,
+        monkeypatch: MonkeyPatch,
+    ):
+        monkeypatch.setattr(CRUD, CRUD.get.__name__, lambda _db, *args: None)
+        monkeypatch.setattr(
+            CRUD, CRUD.create.__name__, lambda _db, **kargs: post_models[0]
+        )
+        post_input = {**post}
+        del post_input["id"]
+        del post_input["published_at"]
+
+        response = client.post(BASE_PATH, json=post_input)
+
+        assert response.json() == post
