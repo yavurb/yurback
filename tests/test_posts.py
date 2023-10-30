@@ -53,8 +53,8 @@ def override_auth() -> Generator[None, None, None]:
     app.dependency_overrides = {}
 
 
-class TestGetPost:
-    def test_should_return_all_posts(
+class TestGetPostOperation:
+    def test_return_all_posts(
         self,
         post: dict[str, Any],
         post_models: list[Post],
@@ -67,8 +67,8 @@ class TestGetPost:
         assert response.json() == {"data": [post]}
 
 
-class TestCreatePost:
-    def test_should_create_post(
+class TestCreatePostOperation:
+    def test_create_post(
         self,
         post,
         post_models,
