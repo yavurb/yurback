@@ -60,7 +60,7 @@ def check_scopes(
 
         if scope not in user.scopes:
             raise HTTPException(
-                status_code=status.HTTP_403_UNAUTHORIZED,
+                status_code=status.HTTP_403_FORBIDDEN,
                 detail={"message": "Not enough permissions"},
             )
 

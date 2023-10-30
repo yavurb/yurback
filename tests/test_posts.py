@@ -86,3 +86,13 @@ class TestCreatePostOperation:
         response = client.post(BASE_PATH, json=post_input)
 
         assert response.json() == post
+
+    def test_require_authentication(self):
+        response = client.post(
+            BASE_PATH,
+            json={},
+        )
+
+        assert (
+            "Not authenticated" in response.json()
+        )  # TODO: Return a dictionay instead
