@@ -67,6 +67,17 @@ class TestGetPostOperation:
         assert response.json() == {"data": [post]}
 
 
+class TestGetSinglePost:
+    def test_get_post(self, post: dict[str, Any], monkeypatch: MonkeyPatch):
+        monkeypatch.setattr(
+            CRUD, CRUD.get_by_id.__name__, lambda _db, _id: Post(**post)
+        )
+
+        response = client.get(f"{BASE_PATH}/1")
+
+        assert response.json() == post
+
+
 class TestCreatePostOperation:
     def test_create_post(
         self,
