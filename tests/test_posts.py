@@ -8,6 +8,8 @@ from src.crud.post import post as CRUD
 from src.main import app
 from src.models.post import Post
 
+from .conftest import DeleteKeys
+
 client = TestClient(app)
 BASE_PATH = "/posts"
 
@@ -84,6 +86,7 @@ class TestCreatePostOperation:
         post,
         post_models,
         override_auth,
+        delete_keys: DeleteKeys,
         monkeypatch: MonkeyPatch,
     ):
         monkeypatch.setattr(CRUD, CRUD.get.__name__, lambda _db, *args: None)
@@ -91,8 +94,9 @@ class TestCreatePostOperation:
             CRUD, CRUD.create.__name__, lambda _db, **kargs: post_models[0]
         )
         post_input = {**post}
-        del post_input["id"]
-        del post_input["published_at"]
+        delete_keys(
+            post_input, ["id", "status", "published_at", "created_at", "updated_at"]
+        )
 
         response = client.post(BASE_PATH, json=post_input)
 
