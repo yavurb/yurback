@@ -8,7 +8,7 @@ from src.crud.project import project as CRUD
 from src.main import app
 from src.models.project import Project
 
-from .conftest import DeleteKeys
+from .conftest import ExcludeKeys
 
 client = TestClient(app)
 BASE_PATH = "/projects"
@@ -86,7 +86,7 @@ class TestCreateProjectOperation:
         project,
         project_models,
         override_auth,
-        delete_keys: DeleteKeys,
+        exclude_keys: ExcludeKeys,
         monkeypatch: MonkeyPatch,
     ):
         monkeypatch.setattr(CRUD, CRUD.get.__name__, lambda _db, *args: None)
@@ -94,7 +94,9 @@ class TestCreateProjectOperation:
             CRUD, CRUD.create.__name__, lambda _db, **kargs: project_models[0]
         )
         post_input = {**project}
-        delete_keys(post_input, ["id", "post_id", "status", "created_at", "updated_at"])
+        exclude_keys(
+            post_input, ["id", "post_id", "status", "created_at", "updated_at"]
+        )
 
         print(post_input)
 
