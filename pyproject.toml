@@ -33,6 +33,8 @@ dev = [
 [tool.pdm.scripts]
 start = "sh start.sh"
 dev = "uvicorn src.main:app --host '0.0.0.0' {args:--port 8910} --reload"
+tests = "pytest -vv"
+tests_cov = "pytest --cov-report term-missing --cov=src"
 
 # Alembic - migrations commands
 db_revision = "alembic revision --autogenerate -m"
