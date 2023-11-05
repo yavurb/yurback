@@ -32,7 +32,8 @@ def sign_up(user: UserCreate, db: DBSession) -> UserOut:
     created_user = crud.create(db, obj_in=user)
 
     token = encode_token({"id": created_user.id, "username": created_user.username})
-    return {"token": token}
+
+    return UserOut(token=token)
 
 
 @router.post("/signin", status_code=status.HTTP_200_OK)
@@ -45,4 +46,4 @@ def sign_in(user: UserSignIn, db: DBSession) -> UserOut:
         )
 
     token = encode_token({"id": found_user.id, "username": found_user.username})
-    return {"token": token}
+    return UserOut(token=token)

@@ -19,14 +19,22 @@ def upload_file(
     db: Annotated[Session, Depends(get_db)],
     storage: Annotated[Storage, Depends(Storage)],
 ) -> AssetOut:
-    is_uploaded, file_key = storage.upload(file.filename, file.file)
+    filename = "" if not file.filename else file.filename
+    is_uploaded, file_key = storage.upload(filename, file.file)
 
     if not is_uploaded:
         raise HTTPException(
             status.HTTP_400_BAD_REQUEST, detail={"message": "Could not upload file"}
         )
 
-    asset = CreateAsset(key=file_key, mimetype=file.content_type)
+    content_type = "" if not file.content_type else file.content_type
+    asset = CreateAsset(key=file_key, mimetype=content_type)
     create_asset = crud.create(db, obj_in=asset)
 
-    return {"id": create_asset.id, "filename": file_key}
+    if not create_asset:
+        raise HTTPException(
+            status.HTTP_500_INTERNAL_SERVER_ERROR,
+            {"message": "Could not create asset."},
+        )
+
+    return AssetOut(id=create_asset.id, filename=file_key)

@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import Dict
+from typing import Any, Dict
 
 from argon2 import PasswordHasher
 from jose import jwt
@@ -10,7 +10,7 @@ ph = PasswordHasher()
 SECRET = settings.jwt_secret
 
 
-def encode_token(data: Dict[str, any]) -> str:
+def encode_token(data: Dict[str, Any]) -> str:
     data.update({"exp": datetime.utcnow() + timedelta(days=7)})
     encoded_token = jwt.encode(data, SECRET)
     return encoded_token

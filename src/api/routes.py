@@ -1,7 +1,6 @@
-from api.endpoints import assets
 from fastapi import APIRouter
 
-from src.api.endpoints import auth, posts, projects
+from src.api.endpoints import assets, auth, posts, projects
 
 api_router = APIRouter()
 

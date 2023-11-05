@@ -21,7 +21,6 @@ ALGORITHM = "HS256"
 class TokenPayload(BaseModel):
     id: int
     username: str
-    scopes: list[str]
 
 
 def decode_token(
@@ -29,7 +28,7 @@ def decode_token(
 ) -> TokenPayload:
     try:
         payload = jwt.decode(token, SECRET, [ALGORITHM])
-        return payload
+        return TokenPayload(**payload)
     except JWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -40,8 +39,8 @@ def decode_token(
 def get_current_user(
     payload: Annotated[TokenPayload, Depends(decode_token)],
     db: Annotated[Session, Depends(get_db)],
-) -> User:
-    user = user_crud.get_by_id(db, payload["id"])
+) -> User | None:
+    user = user_crud.get_by_id(db, payload.id)
     return user
 
 
@@ -60,7 +59,7 @@ def check_scopes(
 
         if scope not in user.scopes:
             raise HTTPException(
-                status_code=status.HTTP_403_UNAUTHORIZED,
+                status_code=status.HTTP_403_FORBIDDEN,
                 detail={"message": "Not enough permissions"},
             )
 
