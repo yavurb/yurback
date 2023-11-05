@@ -20,12 +20,23 @@ def create_project(
     project: ProjectCreate, db: Annotated[Session, Depends(get_db)]
 ) -> Project:
     created_project = crud.create(db, obj_in=project)
+
+    if not created_project:
+        raise HTTPException(
+            status.HTTP_500_INTERNAL_SERVER_ERROR,
+            {"message": "Could not create project."},
+        )
+
     return created_project
 
 
 @router.get("")
 def get_projects(db: Annotated[Session, Depends(get_db)]) -> ResponseAsList[Project]:
     projects = crud.get_multi(db)
+
+    if not projects:
+        projects = []
+
     return ResponseAsList(data=projects)
 
 
@@ -51,6 +62,12 @@ def update_project(
         raise HTTPException(status.HTTP_404_NOT_FOUND, {"message": NOT_FOUND_MESSAGE})
 
     updated_project = crud.update(db, id=id, obj_in=project)
+
+    if not updated_project:  # TODO: Return exactly why the post couldn't be updated
+        raise HTTPException(
+            status.HTTP_500_INTERNAL_SERVER_ERROR, {"message": "Could not create post."}
+        )
+
     return updated_project
 
 

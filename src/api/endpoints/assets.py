@@ -31,4 +31,10 @@ def upload_file(
     asset = CreateAsset(key=file_key, mimetype=content_type)
     create_asset = crud.create(db, obj_in=asset)
 
+    if not create_asset:
+        raise HTTPException(
+            status.HTTP_500_INTERNAL_SERVER_ERROR,
+            {"message": "Could not create asset."},
+        )
+
     return AssetOut(id=create_asset.id, filename=file_key)

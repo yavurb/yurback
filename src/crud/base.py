@@ -1,3 +1,4 @@
+import logging
 from typing import (
     Any,
     Dict,
@@ -12,7 +13,7 @@ from typing import (
 )
 
 from fastapi.encoders import jsonable_encoder
-from pydantic import BaseModel, TypeAdapter
+from pydantic import BaseModel, TypeAdapter, ValidationError
 from sqlalchemy import delete, select
 from sqlalchemy import update as update_row
 from sqlalchemy.orm import Session
@@ -63,7 +64,11 @@ class CRUDBase(
         self, db: Session, id: Any, *, return_schema: bool = True
     ) -> Optional[ModelSchemaType | ModelType]:
         row_instance = db.get(self.model, id)
-        model_schema = TypeAdapter(self.schema).validate_python(row_instance)
+
+        if not row_instance:
+            return None
+
+        model_schema = self.__to_schema(self.schema, row_instance)
         return model_schema if return_schema else row_instance
 
     @overload
@@ -92,24 +97,32 @@ class CRUDBase(
         stmt = select(self.model).filter_by(**query).limit(1)
         row_instance = db.execute(stmt).scalar()
 
-        model_schema = TypeAdapter(self.schema).validate_python(row_instance)
+        if not row_instance:
+            return None
+
+        model_schema = self.__to_schema(self.schema, row_instance)
         return model_schema if return_schema else row_instance
 
     def get_multi(
         self, db: Session, *, skip: int = 0, limit: int = 100
-    ) -> list[ModelSchemaType]:
+    ) -> Optional[list[ModelSchemaType]]:
         stmt = select(self.model).offset(skip).limit(limit)
         rows = db.execute(stmt).scalars().all()
 
-        return TypeAdapter(list[self.schema]).validate_python(rows)
+        if not rows:
+            return None
 
-    def create(self, db: Session, *, obj_in: CreateSchemaType) -> ModelSchemaType:
+        return self.__to_schema(list[self.schema], rows)
+
+    def create(
+        self, db: Session, *, obj_in: CreateSchemaType
+    ) -> Optional[ModelSchemaType]:
         obj_in_data = jsonable_encoder(obj_in)
         db_obj = self.model(**obj_in_data)  # type: ignore
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
-        return TypeAdapter(self.schema).validate_python(db_obj)
+        return self.__to_schema(self.schema, db_obj)
 
     def update(
         self,
@@ -117,7 +130,7 @@ class CRUDBase(
         *,
         id: int,
         obj_in: Union[UpdateSchemaType, Dict[str, Any]],
-    ) -> ModelSchemaType:
+    ) -> Optional[ModelSchemaType]:
         if isinstance(obj_in, dict):
             update_data = obj_in
         else:
@@ -126,12 +139,24 @@ class CRUDBase(
         stmt = update_row(self.model).where(self.model.id == id).values(update_data).returning(self.model)  # type: ignore
         row_instance = db.execute(stmt).scalar()
 
+        if not row_instance:
+            return None
+
         db.commit()
 
-        return TypeAdapter(self.schema).validate_python(row_instance)
+        return self.__to_schema(self.schema, row_instance)
 
     def remove(self, db: Session, *, id: int) -> None:
         stmt = delete(self.model).where(self.model.id == id)  # type: ignore
         db.execute(stmt)
         db.commit()
         return None
+
+    SchemaType = TypeVar("SchemaType")
+
+    def __to_schema(self, schema: Type[SchemaType], db_data: Any) -> SchemaType | None:
+        try:
+            return TypeAdapter(schema).validate_python(db_data)
+        except ValidationError as e:
+            logging.error(e)
+            return None

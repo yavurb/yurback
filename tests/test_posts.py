@@ -111,3 +111,22 @@ class TestCreatePostOperation:
         assert (
             "Not authenticated" in response.json()
         )  # TODO: Return a dictionay instead
+
+    def test_create_existing_post(
+        self,
+        post,
+        post_models,
+        override_auth,
+        exclude_keys: ExcludeKeys,
+        monkeypatch: MonkeyPatch,
+    ):
+        monkeypatch.setattr(CRUD, CRUD.get.__name__, lambda _db, _query: post_models[0])
+        post_input = {**post}
+        exclude_keys(
+            post_input, ["id", "status", "published_at", "created_at", "updated_at"]
+        )
+
+        response = client.post(BASE_PATH, json=post_input)
+
+        assert response.status_code == 422
+        assert response.json() == {"message": "Slug must be unique"}
