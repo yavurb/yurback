@@ -19,7 +19,7 @@ class Storage:
             aws_access_key_id=settings.aws_access_key_id,
             aws_secret_access_key=settings.aws_secret_access_key,
         )
-        self.__bucket = self.__storage_client.Bucket(self.__bucket_name)
+        self.__bucket = self.__storage_client.Bucket(self.__bucket_name)  # type: ignore
 
     def upload(self, filename: str, file: BinaryIO) -> tuple[bool, str]:
         filename = self.__append_uid(filename)
@@ -27,7 +27,7 @@ class Storage:
             self.__bucket.upload_fileobj(file, filename)
         except ClientError as error:
             logging.error(error)
-            return (False, None)
+            return (False, filename)
 
         return (True, filename)
 
