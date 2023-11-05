@@ -21,7 +21,6 @@ ALGORITHM = "HS256"
 class TokenPayload(BaseModel):
     id: int
     username: str
-    scopes: list[str]
 
 
 def decode_token(
