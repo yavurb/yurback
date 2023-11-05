@@ -29,4 +29,4 @@ def upload_file(
     asset = CreateAsset(key=file_key, mimetype=file.content_type)
     create_asset = crud.create(db, obj_in=asset)
 
-    return {"id": create_asset.id, "filename": file_key}
+    return AssetOut(id=create_asset.id, filename=file_key)

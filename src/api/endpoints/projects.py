@@ -26,7 +26,7 @@ def create_project(
 @router.get("")
 def get_projects(db: Annotated[Session, Depends(get_db)]) -> ResponseAsList[Project]:
     projects = crud.get_multi(db)
-    return {"data": projects}
+    return ResponseAsList(data=projects)
 
 
 @router.get("/{id}")
@@ -50,7 +50,7 @@ def update_project(
     if not db_project:
         raise HTTPException(status.HTTP_404_NOT_FOUND, {"message": NOT_FOUND_MESSAGE})
 
-    updated_project = crud.update(db, obj_in=project, db_obj=db_project)
+    updated_project = crud.update(db, id=id, obj_in=project)
     return updated_project
 
 
