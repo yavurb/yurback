@@ -1,14 +1,75 @@
-<h1 align="center">Hi 👋, I'm Royner Perez</h1>
-<h3 align="center">A passionate backend developer from Venezuela</h3>
+# Yurback
 
-<!-- - 🔭 I’m currently working at [Asistensi](https://asistensi.com/) -->
+A backend built with python to serve information to [yurb.dev](https://yurb.dev)
 
-- 🌱 I’m currently learning **Python 🐍**
+This backend is also the core hearth for all the features of **yurb.dev** and a proxy-like backend for future projects.
 
-- 💬 Ask me about **JS/NodeJS**
+#### OpenAPI Docs
 
-- 📫 How to reach me **yavurb@gmail.com**
+You can see a detailed documentations about the APIs available [here](https://api.yurb.dev/docs)
+
+## ⚙️ Set up
+
+_Yurback_ uses [PDM](https://pdm-project.org/latest/) to manage its dependencies. Use the following command to install all the projects's dependencies without altering the _lock_ file.
+
+```sh
+pdm sync
+```
+
+### Environment Variables 😶
+
+_Yurback_ needs certain env variables to be able to run. In order to run the project locally, define all the env variables needed based on the `.env.template` file into a new `.env` file. Below is an example.
+
+```py
+PORT=1234
+ENVIRONMENT="dev" # accepts dev | prod
+JWT_SECRET="my-super-confidencial-secret"
+
+# DB
+DATABASE_URI="postgresql://{user}:{password}@{host}/{database}"
+
+...
+```
+
+> It is worth noting that certain env variables such as `AWS_*` are not needed in production since the backend is built to run in AWS using IAM Roles. This allows the project to access all the AWS services required to work seamlessly.
 
 
-<h3 align="left">Languages and Tools:</h3>
-<p align="left"> <a href="https://www.gnu.org/software/bash/" target="_blank"> <img src="https://www.vectorlogo.zone/logos/gnu_bash/gnu_bash-icon.svg" alt="bash" width="40" height="40"/> </a> <a href="https://www.docker.com/" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original-wordmark.svg" alt="docker" width="40" height="40"/> </a> <a href="https://expressjs.com" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/express/express-original-wordmark.svg" alt="express" width="40" height="40"/> </a> <a href="https://git-scm.com/" target="_blank"> <img src="https://www.vectorlogo.zone/logos/git-scm/git-scm-icon.svg" alt="git" width="40" height="40"/> </a> <a href="https://heroku.com" target="_blank"> <img src="https://www.vectorlogo.zone/logos/heroku/heroku-icon.svg" alt="heroku" width="40" height="40"/> </a> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a> <a href="https://jestjs.io" target="_blank"> <img src="https://www.vectorlogo.zone/logos/jestjsio/jestjsio-icon.svg" alt="jest" width="40" height="40"/> </a> <a href="https://www.linux.org/" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg" alt="linux" width="40" height="40"/> </a> <a href="https://mariadb.org/" target="_blank"> <img src="https://www.vectorlogo.zone/logos/mariadb/mariadb-icon.svg" alt="mariadb" width="40" height="40"/> </a> <a href="https://www.mongodb.com/" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mongodb/mongodb-original-wordmark.svg" alt="mongodb" width="40" height="40"/> </a> <a href="https://nodejs.org" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original-wordmark.svg" alt="nodejs" width="40" height="40"/> </a> <a href="https://www.python.org" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="40" height="40"/> </a> <a href="https://reactjs.org/" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original-wordmark.svg" alt="react" width="40" height="40"/> </a> <a href="https://redux.js.org" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/redux/redux-original.svg" alt="redux" width="40" height="40"/> </a> <a href="https://www.typescriptlang.org/" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg" alt="typescript" width="40" height="40"/> </a> </p>
+## 🧞 Commands
+
+All commands are run from the root of the project, from a terminal and using [PDM](https://pdm-project.org/latest/):
+
+| Command                   | Arguments       | Action                                           | Examples                 	|
+| :------------------------ | :-------------- | :----------------------------------------------- | :-------------------------	|
+| `pdm sync`             		| 								| Installs dependencies                            |														|
+| `pdm run dev`             | `--port`				| Starts local dev server at `localhost:8910`      | `pdm run dev --port 8080`	|
+| `pdm run tests`           | 								| Run all tests using pytest											 |														|
+| `pdm run tests_cov`       | 								| Run all tests and generate a coverage report     |														|
+| `pdm run start`       		| 								| Starts prod-like server at `localhost:8910`			 |														|
+| `pdm run db_revision` 		| 								| Create a new alembic revision                    |														|
+| `pdm run db_upgrade` 		  | 								| Upgrade the DB to the latest revision            |														|
+| `pdm run db_downgrade`	  | 								| Downgrade the DB to the previous revision        |														|
+
+### Running installed packages
+
+_PDM_ allows running installed packages through the `run` command. This means that every installed package, especially dev-related packages such as pytest, can be run without activating the virtual environment.
+
+```sh
+# Generates a report based on the latest test run
+pdm run coverage report -m
+```
+
+
+## Technology Stack
+
+This projects is built using [Python v3.11.x] or later. and uses the following stack.
+
+- [PDM](https://pdm-project.org/latest/) - For package and dependency management.
+- [FastAPI](https://fastapi.tiangolo.com/) - For web server provisioning.
+- [Pydantic](https://docs.pydantic.dev/latest/) - For IO validation
+- [SQLAlchemy](https://docs.sqlalchemy.org/en/20/core/index.html) - For models, querying and connection management.
+- [PostgreSQL](https://www.postgresql.org/) - For SQL engine.
+- [Alembic](https://alembic.sqlalchemy.org/en/latest/) - For migrations management.
+- [Boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html) - For AWS integration.
+- [Pytest](https://docs.pytest.org/en/7.4.x/contents.html) - For unit testing.
+- [Redocly](https://redocly.com/) - For OpenAPI documentation.
+- [Docker](https://www.docker.com/) - For containerization.
