@@ -1,34 +1,75 @@
-# Hey, I'm Roy 🐙
-### A Software Engineer who's passionate about building software
+# Yurback
 
-I create things using Python, JS and Golang. I enjoy developing many ideas and here you may find many of them.
+A backend built with python to serve information to [yurb.dev](https://yurb.dev)
+
+This backend is also the core hearth for all the features of **yurb.dev** and a proxy-like backend for future projects.
+
+#### OpenAPI Docs
+
+You can see a detailed documentations about the APIs available [here](https://api.yurb.dev/docs)
+
+## ⚙️ Set up
+
+_Yurback_ uses [PDM](https://pdm-project.org/latest/) to manage its dependencies. Use the following command to install all the projects's dependencies without altering the _lock_ file.
+
+```sh
+pdm sync
+```
+
+### Environment Variables 😶
+
+_Yurback_ needs certain env variables to be able to run. In order to run the project locally, define all the env variables needed based on the `.env.template` file into a new `.env` file. Below is an example.
+
+```py
+PORT=1234
+ENVIRONMENT="dev" # accepts dev | prod
+JWT_SECRET="my-super-confidencial-secret"
+
+# DB
+DATABASE_URI="postgresql://{user}:{password}@{host}/{database}"
+
+...
+```
+
+> It is worth noting that certain env variables such as `AWS_*` are not needed in production since the backend is built to run in AWS using IAM Roles. This allows the project to access all the AWS services required to work seamlessly.
 
 
----
-<p align="right">📨 Reach me at <a href="mailto:yavurb@gmail.com">yavurb@gmail.com</a> or visit my <a href="https://bento.me/yurb">bento 🍱</a></p>
+## 🧞 Commands
 
-- 📚 I’m currently learning **Golang** <img src="https://www.svgrepo.com/show/373635/go-gopher.svg" alt="golang" width="20">
-- 🔍 Pursuing both AWS CCP and SAA certifications
+All commands are run from the root of the project, from a terminal and using [PDM](https://pdm-project.org/latest/):
 
-<h3 align="left">Languages and Tools I use</h3>
-<div>
-	<img width="40" src="https://user-images.githubusercontent.com/25181517/183423507-c056a6f9-1ba8-4312-a350-19bcbc5a8697.png" alt="Python" title="Python"/>
-	<img width="40" src="https://user-images.githubusercontent.com/25181517/192149581-88194d20-1a37-4be8-8801-5dc0017ffbbe.png" alt="Go" title="Go"/>
-	<img width="40" src="https://user-images.githubusercontent.com/25181517/183890598-19a0ac2d-e88a-4005-a8df-1ee36782fde1.png" alt="TypeScript" title="TypeScript"/>
-	<img width="40" src="https://user-images.githubusercontent.com/25181517/183568594-85e280a7-0d7e-4d1a-9028-c8c2209e073c.png" alt="Node.js" title="Node.js"/>
-	<img width="40" src="https://user-images.githubusercontent.com/25181517/183896132-54262f2e-6d98-41e3-8888-e40ab5a17326.png" alt="AWS" title="AWS"/>
-	<img width="40" src="https://user-images.githubusercontent.com/25181517/117207330-263ba280-adf4-11eb-9b97-0ac5b40bc3be.png" alt="Docker" title="Docker"/>
-	<img width="40" src="https://user-images.githubusercontent.com/25181517/183345121-36788a6e-5462-424a-be67-af1ebeda79a2.png" alt="Terraform" title="Terraform"/>
-	<img width="40" src="https://user-images.githubusercontent.com/25181517/117208740-bfb78400-adf5-11eb-97bb-09072b6bedfc.png" alt="PostgreSQL" title="PostgreSQL"/>
-	<img width="40" src="https://user-images.githubusercontent.com/25181517/182884177-d48a8579-2cd0-447a-b9a6-ffc7cb02560e.png" alt="mongoDB" title="mongoDB"/>
-	<img width="40" src="https://user-images.githubusercontent.com/25181517/186711335-a3729606-5a78-4496-9a36-06efcc74f800.png" alt="Swagger" title="Swagger"/>
-	<img width="40" src="https://icon.icepanel.io/Technology/svg/FastAPI.svg" alt="FastAPI" title="FastAPI"/>
-	<img width="40" src="https://icon.icepanel.io/Technology/svg/Nest.js.svg" alt="NestJS" title="NestJS"/>
-	<img width="40" src="https://icon.icepanel.io/Technology/png-shadow-512/Astro.png" alt="Astro" title="Astro"/>
-</div>
+| Command                   | Arguments       | Action                                           | Examples                 	|
+| :------------------------ | :-------------- | :----------------------------------------------- | :-------------------------	|
+| `pdm sync`             		| 								| Installs dependencies                            |														|
+| `pdm run dev`             | `--port`				| Starts local dev server at `localhost:8910`      | `pdm run dev --port 8080`	|
+| `pdm run tests`           | 								| Run all tests using pytest											 |														|
+| `pdm run tests_cov`       | 								| Run all tests and generate a coverage report     |														|
+| `pdm run start`       		| 								| Starts prod-like server at `localhost:8910`			 |														|
+| `pdm run db_revision` 		| 								| Create a new alembic revision                    |														|
+| `pdm run db_upgrade` 		  | 								| Upgrade the DB to the latest revision            |														|
+| `pdm run db_downgrade`	  | 								| Downgrade the DB to the previous revision        |														|
 
----
+### Running installed packages
 
-[![wakatime](https://wakatime.com/badge/user/197cd77f-ed5f-43c8-b23e-27ed857ab296.svg)](https://wakatime.com/@197cd77f-ed5f-43c8-b23e-27ed857ab296)
+_PDM_ allows running installed packages through the `run` command. This means that every installed package, especially dev-related packages such as pytest, can be run without activating the virtual environment.
 
-![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=yavurb&layout=compact&langs_count=8&card_width=320)
+```sh
+# Generates a report based on the latest test run
+pdm run coverage report -m
+```
+
+
+## Technology Stack
+
+This projects is built using [Python v3.11.x] or later. and uses the following stack.
+
+- [PDM](https://pdm-project.org/latest/) - For package and dependency management.
+- [FastAPI](https://fastapi.tiangolo.com/) - For web server provisioning.
+- [Pydantic](https://docs.pydantic.dev/latest/) - For IO validation
+- [SQLAlchemy](https://docs.sqlalchemy.org/en/20/core/index.html) - For models, querying and connection management.
+- [PostgreSQL](https://www.postgresql.org/) - For SQL engine.
+- [Alembic](https://alembic.sqlalchemy.org/en/latest/) - For migrations management.
+- [Boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html) - For AWS integration.
+- [Pytest](https://docs.pytest.org/en/7.4.x/contents.html) - For unit testing.
+- [Redocly](https://redocly.com/) - For OpenAPI documentation.
+- [Docker](https://www.docker.com/) - For containerization.
