@@ -24,7 +24,7 @@ class Storage:
     def upload(self, filename: str, file: BinaryIO) -> tuple[bool, str]:
         filename = self.__append_uid(filename)
         try:
-            self.__bucket.upload_fileobj(file, filename)
+            self.__bucket.upload_fileobj(file, f"assets/{filename}")
         except ClientError as error:
             logging.error(error)
             return (False, filename)
