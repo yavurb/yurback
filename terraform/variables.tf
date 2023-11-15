@@ -92,6 +92,7 @@ variable "lt_ebs_volume_size" {
 }
 
 # * SERVICE_VARS * #
+
 variable "force_deploy" {
   type        = bool
   default     = false

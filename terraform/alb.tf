@@ -46,8 +46,8 @@ resource "aws_vpc_security_group_ingress_rule" "allow_https" {
   to_port     = 443
 }
 
-resource "aws_lb" "yurb_dev_lb" {
-  name               = "${var.stack_name}-lb-${var.stack_environment}"
+resource "aws_lb" "app_load_balancer" {
+  name               = "${var.stack_name}-LoadBalancer-${local.stack_env_title}"
   internal           = false
   load_balancer_type = "application"
   subnets            = data.aws_subnets.default_subnets.ids
@@ -60,8 +60,8 @@ resource "aws_lb" "yurb_dev_lb" {
   }
 }
 
-resource "aws_lb_target_group" "yurb_dev_lb_tg" {
-  name     = "${var.stack_name}-lb-tg-${var.stack_environment}"
+resource "aws_lb_target_group" "app_lb_target_group" {
+  name     = "${var.stack_name}-LBTargetGroup-${local.stack_env_title}"
   port     = 80
   protocol = "HTTP"
   vpc_id   = aws_default_vpc.default.id
@@ -78,40 +78,40 @@ resource "aws_lb_target_group" "yurb_dev_lb_tg" {
   }
 }
 
-resource "aws_lb_listener" "yurb_dev_lb_http_listener" {
-  load_balancer_arn = aws_lb.yurb_dev_lb.arn
+resource "aws_lb_listener" "app_lb_http_listener" {
+  load_balancer_arn = aws_lb.app_load_balancer.arn
   port              = "80"
   protocol          = "HTTP"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.yurb_dev_lb_tg.arn
+    target_group_arn = aws_lb_target_group.app_lb_target_group.arn
   }
 }
 
-resource "aws_lb_listener" "yurb_dev_lb_https_listener" {
-  depends_on = [aws_acm_certificate.yurb]
+resource "aws_lb_listener" "app_lb_https_listener" {
+  depends_on = [aws_acm_certificate.main_domain]
 
-  load_balancer_arn = aws_lb.yurb_dev_lb.arn
+  load_balancer_arn = aws_lb.app_load_balancer.arn
   port              = "443"
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
-  certificate_arn   = aws_acm_certificate.yurb.arn
+  certificate_arn   = aws_acm_certificate.main_domain.arn
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.yurb_dev_lb_tg.arn
+    target_group_arn = aws_lb_target_group.app_lb_target_group.arn
   }
 }
 
 resource "aws_route53_record" "api" {
-  zone_id = aws_route53_zone.yurb_dev.zone_id
+  zone_id = aws_route53_zone.main_domain.zone_id
   name    = var.domains.api_fqdn
   type    = "A"
 
   alias {
-    name                   = aws_lb.yurb_dev_lb.dns_name
-    zone_id                = aws_lb.yurb_dev_lb.zone_id
+    name                   = aws_lb.app_load_balancer.dns_name
+    zone_id                = aws_lb.app_load_balancer.zone_id
     evaluate_target_health = true
   }
 }

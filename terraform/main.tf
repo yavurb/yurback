@@ -26,7 +26,11 @@ provider "namecheap" {
   api_key   = var.namecheap_credentials.api_key
 }
 
-resource "aws_acm_certificate" "yurb" {
+locals {
+  stack_env_title = title(var.stack_environment)
+}
+
+resource "aws_acm_certificate" "main_domain" {
   domain_name               = var.domains.main_fqdn
   subject_alternative_names = [var.domains.cdn_fqdn, var.domains.api_fqdn]
   validation_method         = "DNS"
@@ -37,7 +41,7 @@ resource "aws_acm_certificate" "yurb" {
   }
 }
 
-resource "aws_route53_zone" "yurb_dev" {
+resource "aws_route53_zone" "main_domain" {
   name = var.domains.main_fqdn
 
   tags = {
@@ -46,13 +50,13 @@ resource "aws_route53_zone" "yurb_dev" {
   }
 }
 
-resource "aws_route53_record" "yurb" {
+resource "aws_route53_record" "main_records" {
   for_each = {
-    for dvo in aws_acm_certificate.yurb.domain_validation_options : dvo.domain_name => {
+    for dvo in aws_acm_certificate.main_domain.domain_validation_options : dvo.domain_name => {
       name    = dvo.resource_record_name
       record  = dvo.resource_record_value
       type    = dvo.resource_record_type
-      zone_id = aws_route53_zone.yurb_dev.zone_id
+      zone_id = aws_route53_zone.main_domain.zone_id
     }
   }
 
@@ -65,19 +69,21 @@ resource "aws_route53_record" "yurb" {
 }
 
 resource "aws_acm_certificate_validation" "validate_records" {
-  certificate_arn         = aws_acm_certificate.yurb.arn
-  validation_record_fqdns = [for record in aws_route53_record.yurb : record.fqdn]
+  depends_on = [ namecheap_domain_records.main_domain_name_servers ]
+
+  certificate_arn         = aws_acm_certificate.main_domain.arn
+  validation_record_fqdns = [for record in aws_route53_record.main_records : record.fqdn]
 }
 
-resource "namecheap_domain_records" "yurb_dev" {
+resource "namecheap_domain_records" "main_domain_name_servers" {
   domain      = var.domains.main_fqdn
   mode        = "OVERWRITE"
-  nameservers = aws_route53_zone.yurb_dev.name_servers
+  nameservers = aws_route53_zone.main_domain.name_servers
 }
 
 # --- Frontend Resources ---- #
 
-resource "aws_route53_record" "yurb_dev" {
+resource "aws_route53_record" "main_frontend_records" {
   for_each = {
     yurb = {
       name   = var.domains.main_fqdn
@@ -91,7 +97,7 @@ resource "aws_route53_record" "yurb_dev" {
     }
   }
 
-  zone_id = aws_route53_zone.yurb_dev.zone_id
+  zone_id = aws_route53_zone.main_domain.zone_id
   name    = each.value.name
   type    = each.value.type
   records = [each.value.record]
