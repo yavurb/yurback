@@ -26,16 +26,20 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: {{ env.python-version }}
+          python-version: ${{ env.python-version }}
       - name: Setup PDM
         uses: pdm-project/setup-pdm@v3
         with:
-          python-version: {{ env.python-version }}
+          python-version: ${{ env.python-version }}
       - name: Setup env file
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
         run: |
-          echo {{ secrets.JWT_SECRET }} >> .env
-          echo {{ secrets.AWS_S3_BUCKET }} >> .env
-          echo {{ secrets.DATABASE_URI }} >> .env
+          echo $JWT_SECRET >> .env
+          echo $AWS_S3_BUCKET >> .env
+          echo $DATABASE_URI >> .env
       - name: Run migrations
         run: pdm run db_upgrade
       - name: Configure AWS credentials
