@@ -30,6 +30,34 @@ locals {
   stack_env_title = title(var.stack_environment)
 }
 
+resource "aws_default_vpc" "default" {
+  tags = {
+    Name = "Default VPC"
+  }
+}
+
+data "aws_subnets" "default_subnets" {
+  filter {
+    name   = "vpc-id"
+    values = [aws_default_vpc.default.id]
+  }
+}
+
+resource "aws_route53_zone" "main_domain" {
+  name = var.domains.main_fqdn
+
+  tags = {
+    environment = var.stack_environment
+    project     = var.stack_name
+  }
+}
+
+resource "namecheap_domain_records" "main_domain_name_servers" {
+  domain      = var.domains.main_fqdn
+  mode        = "OVERWRITE"
+  nameservers = aws_route53_zone.main_domain.name_servers
+}
+
 resource "aws_acm_certificate" "main_domain" {
   domain_name               = var.domains.main_fqdn
   subject_alternative_names = [var.domains.cdn_fqdn, var.domains.api_fqdn]
@@ -41,13 +69,11 @@ resource "aws_acm_certificate" "main_domain" {
   }
 }
 
-resource "aws_route53_zone" "main_domain" {
-  name = var.domains.main_fqdn
+resource "aws_acm_certificate_validation" "validate_records" {
+  depends_on = [ namecheap_domain_records.main_domain_name_servers ]
 
-  tags = {
-    environment = var.stack_environment
-    project     = var.stack_name
-  }
+  certificate_arn         = aws_acm_certificate.main_domain.arn
+  validation_record_fqdns = [for record in aws_route53_record.main_records : record.fqdn]
 }
 
 resource "aws_route53_record" "main_records" {
@@ -66,19 +92,6 @@ resource "aws_route53_record" "main_records" {
   ttl             = 60
   type            = each.value.type
   zone_id         = each.value.zone_id
-}
-
-resource "aws_acm_certificate_validation" "validate_records" {
-  depends_on = [ namecheap_domain_records.main_domain_name_servers ]
-
-  certificate_arn         = aws_acm_certificate.main_domain.arn
-  validation_record_fqdns = [for record in aws_route53_record.main_records : record.fqdn]
-}
-
-resource "namecheap_domain_records" "main_domain_name_servers" {
-  domain      = var.domains.main_fqdn
-  mode        = "OVERWRITE"
-  nameservers = aws_route53_zone.main_domain.name_servers
 }
 
 # --- Frontend Resources ---- #

@@ -8,30 +8,6 @@ resource "aws_s3_bucket" "app_bucket" {
   }
 }
 
-resource "aws_s3_bucket_policy" "allow_access_from_cloudfront" {
-  bucket = aws_s3_bucket.app_bucket.id
-  policy = data.aws_iam_policy_document.cf_s3_policy.json
-}
-
-data "aws_iam_policy_document" "cf_s3_policy" {
-  policy_id = "PolicyForCloudFrontPrivateContent"
-  statement {
-    sid    = "AllowCloudFrontServicePrincipal"
-    effect = "Allow"
-    principals {
-      type        = "Service"
-      identifiers = ["cloudfront.amazonaws.com"]
-    }
-    actions   = ["s3:GetObject"]
-    resources = ["arn:aws:s3:::${var.cdn_bucket_name}/*"]
-    condition {
-      test     = "StringEquals"
-      variable = "AWS:SourceArn"
-      values   = [aws_cloudfront_distribution.cdn.arn]
-    }
-  }
-}
-
 data "aws_cloudfront_cache_policy" "cdn_managed_cp" {
   name = "Managed-CachingOptimized"
 }
@@ -83,6 +59,32 @@ resource "aws_cloudfront_distribution" "cdn" {
     project     = var.stack_name
   }
 }
+
+data "aws_iam_policy_document" "cf_s3_policy" {
+  policy_id = "PolicyForCloudFrontPrivateContent"
+  statement {
+    sid    = "AllowCloudFrontServicePrincipal"
+    effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+    actions   = ["s3:GetObject"]
+    resources = ["arn:aws:s3:::${var.cdn_bucket_name}/*"]
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = [aws_cloudfront_distribution.cdn.arn]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "allow_access_from_cloudfront" {
+  bucket = aws_s3_bucket.app_bucket.id
+  policy = data.aws_iam_policy_document.cf_s3_policy.json
+}
+
+# * Create CDN record * #
 
 resource "aws_route53_record" "cdn" {
   zone_id = aws_route53_zone.main_domain.zone_id

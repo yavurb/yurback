@@ -8,24 +8,6 @@ resource "aws_security_group" "allow_components_traffic" {
   }
 }
 
-resource "aws_default_security_group" "default_security_group" {
-  vpc_id = aws_default_vpc.default.id
-
-  ingress {
-    protocol  = -1
-    self      = true
-    from_port = 0
-    to_port   = 0
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
 resource "aws_vpc_security_group_ingress_rule" "allow_app_lb" {
   security_group_id            = aws_security_group.allow_components_traffic.id
   referenced_security_group_id = aws_security_group.allow_alb_http_traffic.id
@@ -54,20 +36,35 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
-data "aws_iam_policy_document" "trusted_ecs_instance_policy" {
-  statement {
-    effect  = "Allow"
-    actions = ["sts:AssumeRole"]
+data "aws_iam_instance_profile" "ecs_instance_profile" {
+  name = "ecsInstanceRole"
+}
 
-    principals {
-      type        = "Service"
-      identifiers = ["ecs.amazonaws.com", "ec2.amazonaws.com"]
-    }
+resource "aws_default_security_group" "default_security_group" {
+  vpc_id = aws_default_vpc.default.id
+
+  ingress {
+    protocol  = -1
+    self      = true
+    from_port = 0
+    to_port   = 0
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
-data "aws_iam_instance_profile" "ecs_instance_profile" {
-  name = "ecsInstanceRole"
+resource "aws_ecs_cluster" "app_ecs_cluster" {
+  name = "${var.stack_name}${local.stack_env_title}"
+
+  tags = {
+    environment = var.stack_environment
+    project     = var.stack_name
+  }
 }
 
 resource "aws_launch_template" "app_launch_template" {
@@ -118,15 +115,6 @@ resource "aws_autoscaling_group" "app_ecs_asg" {
     key                 = "AmazonECSManaged"
     value               = true
     propagate_at_launch = true
-  }
-}
-
-resource "aws_ecs_cluster" "app_ecs_cluster" {
-  name = "${var.stack_name}${local.stack_env_title}"
-
-  tags = {
-    environment = var.stack_environment
-    project     = var.stack_name
   }
 }
 

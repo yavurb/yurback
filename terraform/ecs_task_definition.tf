@@ -1,3 +1,12 @@
+resource "aws_cloudwatch_log_group" "task_log_group" {
+  name = "/ecs/${var.stack_name}${local.stack_env_title}"
+
+  tags = {
+    environment = var.stack_environment
+    project     = var.stack_name
+  }
+}
+
 data "aws_iam_policy_document" "trusted_ecs_task_policy" {
   statement {
     effect = "Allow"
@@ -95,16 +104,6 @@ resource "aws_ecs_task_definition" "app_task_definition" {
       }
     }
   ])
-
-  tags = {
-    environment = var.stack_environment
-    project     = var.stack_name
-  }
-}
-
-
-resource "aws_cloudwatch_log_group" "task_log_group" {
-  name = "/ecs/${var.stack_name}${local.stack_env_title}"
 
   tags = {
     environment = var.stack_environment

@@ -1,16 +1,3 @@
-resource "aws_default_vpc" "default" {
-  tags = {
-    Name = "Default VPC"
-  }
-}
-
-data "aws_subnets" "default_subnets" {
-  filter {
-    name   = "vpc-id"
-    values = [aws_default_vpc.default.id]
-  }
-}
-
 resource "aws_security_group" "allow_alb_http_traffic" {
   name        = "allow_http_https"
   description = "Allow HTTP and HTTPS traffic into the ALB"
@@ -103,6 +90,8 @@ resource "aws_lb_listener" "app_lb_https_listener" {
     target_group_arn = aws_lb_target_group.app_lb_target_group.arn
   }
 }
+
+# * Create API record * #
 
 resource "aws_route53_record" "api" {
   zone_id = aws_route53_zone.main_domain.zone_id
