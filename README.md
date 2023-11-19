@@ -58,10 +58,9 @@ _PDM_ allows running installed packages through the `run` command. This means th
 pdm run coverage report -m
 ```
 
-
 ## Technology Stack
 
-This projects is built using [Python v3.11.x] or later. and uses the following stack.
+This project is built using [Python v3.11.x] or later. and uses the following stack.
 
 - [PDM](https://pdm-project.org/latest/) - For package and dependency management.
 - [FastAPI](https://fastapi.tiangolo.com/) - For web server provisioning.
@@ -73,3 +72,27 @@ This projects is built using [Python v3.11.x] or later. and uses the following s
 - [Pytest](https://docs.pytest.org/en/7.4.x/contents.html) - For unit testing.
 - [Redocly](https://redocly.com/) - For OpenAPI documentation.
 - [Docker](https://www.docker.com/) - For containerization.
+
+## About Terraform <img src="https://www.vectorlogo.zone/logos/terraformio/terraformio-icon.svg" style="width:20px;">
+
+Terraform is used to provision the infrastructure needed to run this service/backend at [api.yurb.dev](https://api.yurb.dev). At the time, **yurback** is running in AWS using ECS, ALB, ASG, RDS and CloudFront as core services and Route53 as DNS resolution. You can find all the resources/services used by **yurback** within AWS in the `terraform/` directory.
+
+> #### Services Legend
+>
+> - [ECS](https://aws.amazon.com/ecs/) - Elastic Container Service
+> - [ALB](https://aws.amazon.com/elasticloadbalancing/application-load-balancer/) - Application Load Balancer
+> - [ASG](https://aws.amazon.com/autoscaling/) - Auto Scaling Group
+> - [RDS](https://aws.amazon.com/rds/) - Relational Database Service
+
+The infrastructure configured uses certain variables to properly deploy the infrastructure with hardcoded names and without exposing compromising information about the infrastructure configuration. Go to `terraform/variables.tf` to have a look to all the variables used by the infrastructure.
+
+Before applying the infrastructure for the first time, there are certain requirements that the target AWS account needs to have configured.
+
+#### AWS Roles
+
+Make sure to have the following AWS Roles before applying the terraform infrastructure.
+
+- ecsInstanceRole
+- AWSServiceRoleForECS
+
+> Note: In the future, I'm planning to migrate the IaC to [pulumi](https://www.pulumi.com/), an open source alternative to Terraform. With this migration I expect to use a CDK rather than a specific configuration language.
