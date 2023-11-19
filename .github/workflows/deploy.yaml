@@ -1,0 +1,58 @@
+name: Deploy to production
+run-name: Deploy {{ github.repository }}
+on:
+  pull_request_target:
+    types:
+      - closed
+    branches:
+      - 'main'
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  python-version: '3.12'
+
+
+jobs:
+  build:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: {{ env.python-version }}
+      - name: Setup PDM
+        uses: pdm-project/setup-pdm@v3
+        with:
+          python-version: {{ env.python-version }}
+      - name: Setup env file
+        run: |
+          echo {{ secrets.JWT_SECRET }} >> .env
+          echo {{ secrets.AWS_S3_BUCKET }} >> .env
+          echo {{ secrets.DATABASE_URI }} >> .env
+      - name: Run migrations
+        run: pdm run db_upgrade
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push docker image to Amazon ECR
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: yurb.dev
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
