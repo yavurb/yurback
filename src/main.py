@@ -16,8 +16,8 @@ app = FastAPI(
 
 
 @app.get("/")
-def read_root() -> dict[str, str]:
-    return {"Hello": "World"}
+def read_root() -> str:
+    return "Healthy ✅"
 
 
 app.exception_handler(StarletteHTTPException)(http_exception_handler)
@@ -25,3 +25,15 @@ app.exception_handler(RequestValidationError)(validation_exception_handler)
 
 
 app.include_router(api_router)
+
+version = "0.3.0"
+print(
+    f"""
+██╗   ██╗██╗   ██╗██████╗ ██████╗  █████╗  ██████╗██╗  ██╗
+╚██╗ ██╔╝██║   ██║██╔══██╗██╔══██╗██╔══██╗██╔════╝██║ ██╔╝
+ ╚████╔╝ ██║   ██║██████╔╝██████╔╝███████║██║     █████╔╝
+  ╚██╔╝  ██║   ██║██╔══██╗██╔══██╗██╔══██║██║     ██╔═██╗
+   ██║   ╚██████╔╝██║  ██║██████╔╝██║  ██║╚██████╗██║  ██╗
+   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝.{version}
+"""
+)
