@@ -14,6 +14,7 @@ class ProjectBase(BaseModel):
     description: str
     tags: list[str]
     post_id: Optional[int] = None
+    coming_soon: Optional[bool] = False
 
 
 class ProjectCreate(ProjectBase):
@@ -27,6 +28,7 @@ class ProjectUpdate(ProjectBase):
     url: Optional[str] = None
     description: Optional[str] = None
     tags: Optional[list[str]] = None
+    coming_soon: Optional[bool] = None
 
 
 class Project(ProjectBase):
