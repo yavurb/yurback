@@ -7,9 +7,9 @@ terraform {
       version = ">= 5.24.0, < 6.0.0"
     }
 
-    namecheap = {
-      source  = "namecheap/namecheap"
-      version = ">= 2.1.0, < 3.0.0"
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = ">= 4.20.0, < 5.0.0"
     }
   }
 
@@ -20,10 +20,8 @@ provider "aws" {
   region = var.aws_region
 }
 
-provider "namecheap" {
-  user_name = var.namecheap_credentials.user
-  api_user  = var.namecheap_credentials.api_user
-  api_key   = var.namecheap_credentials.api_key
+provider "cloudflare" {
+  api_token = var.cloudflare_api_token
 }
 
 locals {
@@ -43,19 +41,8 @@ data "aws_subnets" "default_subnets" {
   }
 }
 
-resource "aws_route53_zone" "main_domain" {
+data "cloudflare_zone" "main_domain" {
   name = var.domains.main_fqdn
-
-  tags = {
-    environment = var.stack_environment
-    project     = var.stack_name
-  }
-}
-
-resource "namecheap_domain_records" "main_domain_name_servers" {
-  domain      = var.domains.main_fqdn
-  mode        = "OVERWRITE"
-  nameservers = aws_route53_zone.main_domain.name_servers
 }
 
 resource "aws_acm_certificate" "main_domain" {
@@ -69,34 +56,35 @@ resource "aws_acm_certificate" "main_domain" {
   }
 }
 
-resource "aws_acm_certificate_validation" "validate_records" {
-  depends_on = [ namecheap_domain_records.main_domain_name_servers ]
 
-  certificate_arn         = aws_acm_certificate.main_domain.arn
-  validation_record_fqdns = [for record in aws_route53_record.main_records : record.fqdn]
-}
-
-resource "aws_route53_record" "main_records" {
+resource "cloudflare_record" "main_records" {
   for_each = {
     for dvo in aws_acm_certificate.main_domain.domain_validation_options : dvo.domain_name => {
       name    = dvo.resource_record_name
       record  = dvo.resource_record_value
       type    = dvo.resource_record_type
-      zone_id = aws_route53_zone.main_domain.zone_id
+      zone_id = data.cloudflare_zone.main_domain.id
     }
   }
 
   allow_overwrite = true
   name            = each.value.name
-  records         = [each.value.record]
+  value           = each.value.record
   ttl             = 60
   type            = each.value.type
   zone_id         = each.value.zone_id
 }
 
+resource "aws_acm_certificate_validation" "validate_records" {
+  depends_on = [cloudflare_record.main_records]
+
+  certificate_arn         = aws_acm_certificate.main_domain.arn
+  validation_record_fqdns = [for record in cloudflare_record.main_records : record.hostname]
+}
+
 # --- Frontend Resources ---- #
 
-resource "aws_route53_record" "main_frontend_records" {
+resource "cloudflare_record" "main_frontend_records" {
   for_each = {
     yurb = {
       name   = var.domains.main_fqdn
@@ -110,9 +98,9 @@ resource "aws_route53_record" "main_frontend_records" {
     }
   }
 
-  zone_id = aws_route53_zone.main_domain.zone_id
+  zone_id = data.cloudflare_zone.main_domain.id
   name    = each.value.name
   type    = each.value.type
-  records = [each.value.record]
-  ttl     = 300
+  value   = each.value.record
+  ttl = 300
 }

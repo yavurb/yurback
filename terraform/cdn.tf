@@ -86,10 +86,12 @@ resource "aws_s3_bucket_policy" "allow_access_from_cloudfront" {
 
 # * Create CDN record * #
 
-resource "aws_route53_record" "cdn" {
-  zone_id = aws_route53_zone.main_domain.zone_id
+resource "cloudflare_record" "cdn" {
+  depends_on = [aws_cloudfront_distribution.cdn]
+
+  zone_id = data.cloudflare_zone.main_domain.id
   name    = var.domains.cdn_fqdn
   type    = "CNAME"
-  ttl     = 300
-  records = [aws_cloudfront_distribution.cdn.domain_name]
+  value   = aws_cloudfront_distribution.cdn.domain_name
+  ttl = 300
 }

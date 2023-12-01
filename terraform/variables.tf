@@ -19,12 +19,8 @@ variable "aws_region" {
   default = "us-east-1"
 }
 
-variable "namecheap_credentials" {
-  type = object({
-    user     = string
-    api_user = string
-    api_key  = string
-  })
+variable "cloudflare_api_token" {
+  type      = string
   sensitive = true
 }
 
