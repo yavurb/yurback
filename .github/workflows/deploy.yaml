@@ -6,10 +6,16 @@ on:
       - closed
     branches:
       - 'main'
+    paths-ignore:
+      - 'terraform/**'
   push:
     branches:
       - main
+    paths-ignore:
+      - 'terraform/**'
   workflow_dispatch:
+    paths-ignore:
+      - 'terraform/**'
 
 env:
   python-version: '3.11'
@@ -71,3 +77,17 @@ jobs:
         run: |
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Redeploy ECS Service
+        run: |
+          aws ecs update-service --cluster ${{ secrets.AWS_CLUSTER_NAME }} --service ${{ secrets.AWS_SERVICE_NAME }}
