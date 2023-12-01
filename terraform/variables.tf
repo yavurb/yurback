@@ -19,12 +19,8 @@ variable "aws_region" {
   default = "us-east-1"
 }
 
-variable "namecheap_credentials" {
-  type = object({
-    user     = string
-    api_user = string
-    api_key  = string
-  })
+variable "cloudflare_api_token" {
+  type      = string
   sensitive = true
 }
 
@@ -89,14 +85,6 @@ variable "lt_instance_type" {
 variable "lt_ebs_volume_size" {
   type    = number
   default = 30
-}
-
-# * SERVICE_VARS * #
-
-variable "force_deploy" {
-  type        = bool
-  default     = false
-  description = "If true, force the service to redeploy"
 }
 
 # * TASK_DEFINITION_VARS * #

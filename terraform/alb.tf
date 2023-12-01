@@ -93,14 +93,12 @@ resource "aws_lb_listener" "app_lb_https_listener" {
 
 # * Create API record * #
 
-resource "aws_route53_record" "api" {
-  zone_id = aws_route53_zone.main_domain.zone_id
-  name    = var.domains.api_fqdn
-  type    = "A"
+resource "cloudflare_record" "api" {
+  depends_on = [aws_lb.app_load_balancer]
 
-  alias {
-    name                   = aws_lb.app_load_balancer.dns_name
-    zone_id                = aws_lb.app_load_balancer.zone_id
-    evaluate_target_health = true
-  }
+  zone_id = data.cloudflare_zone.main_domain.id
+  name    = var.domains.api_fqdn
+  type    = "CNAME"
+  value   = lower(aws_lb.app_load_balancer.dns_name)
+  ttl     = 300
 }

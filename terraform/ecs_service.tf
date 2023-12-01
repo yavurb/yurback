@@ -3,13 +3,16 @@ data "aws_iam_role" "ecs_service_role" {
 }
 
 resource "aws_ecs_service" "app_ecs_service" {
-  name                              = "${var.stack_name}_BackendService_${local.stack_env_title}"
-  cluster                           = aws_ecs_cluster.app_ecs_cluster.id
-  task_definition                   = aws_ecs_task_definition.app_task_definition.arn
-  desired_count                     = 1
-  force_new_deployment              = var.force_deploy
-  health_check_grace_period_seconds = 30
-  iam_role                          = data.aws_iam_role.ecs_service_role.arn
+  name                               = "${var.stack_name}_BackendService_${local.stack_env_title}"
+  cluster                            = aws_ecs_cluster.app_ecs_cluster.id
+  task_definition                    = aws_ecs_task_definition.app_task_definition.arn
+  desired_count                      = 1
+  health_check_grace_period_seconds  = 30
+  iam_role                           = data.aws_iam_role.ecs_service_role.arn
+  force_new_deployment               = true
+  deployment_minimum_healthy_percent = 100
+  deployment_maximum_percent         = 200
+
   ordered_placement_strategy {
     type  = "spread"
     field = "attribute:ecs.availability-zone"
