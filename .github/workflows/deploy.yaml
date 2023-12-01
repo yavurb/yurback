@@ -1,13 +1,6 @@
 name: Deploy to production
 run-name: Deploy ${{ github.repository }}
 on:
-  pull_request_target:
-    types:
-      - closed
-    branches:
-      - 'main'
-    paths-ignore:
-      - 'terraform/**'
   push:
     branches:
       - main
@@ -23,7 +16,6 @@ env:
 
 jobs:
   build:
-    if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch' || github.event_name == 'push'
     runs-on: ubuntu-latest
     environment: production
     steps:
@@ -90,4 +82,4 @@ jobs:
           aws-region: us-east-1
       - name: Redeploy ECS Service
         run: |
-          aws ecs update-service --cluster ${{ secrets.AWS_CLUSTER_NAME }} --service ${{ secrets.AWS_SERVICE_NAME }}
+          aws ecs update-service --cluster ${{ secrets.AWS_CLUSTER_NAME }} --service ${{ secrets.AWS_SERVICE_NAME }} --force-new-deployment
