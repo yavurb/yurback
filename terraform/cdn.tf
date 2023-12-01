@@ -93,5 +93,5 @@ resource "cloudflare_record" "cdn" {
   name    = var.domains.cdn_fqdn
   type    = "CNAME"
   value   = aws_cloudfront_distribution.cdn.domain_name
-  ttl = 300
+  ttl     = 300
 }

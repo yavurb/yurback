@@ -100,5 +100,5 @@ resource "cloudflare_record" "api" {
   name    = var.domains.api_fqdn
   type    = "CNAME"
   value   = lower(aws_lb.app_load_balancer.dns_name)
-  ttl = 300
+  ttl     = 300
 }

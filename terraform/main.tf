@@ -102,5 +102,5 @@ resource "cloudflare_record" "main_frontend_records" {
   name    = each.value.name
   type    = each.value.type
   value   = each.value.record
-  ttl = 300
+  ttl     = 300
 }

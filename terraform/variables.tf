@@ -87,14 +87,6 @@ variable "lt_ebs_volume_size" {
   default = 30
 }
 
-# * SERVICE_VARS * #
-
-variable "force_deploy" {
-  type        = bool
-  default     = false
-  description = "If true, force the service to redeploy"
-}
-
 # * TASK_DEFINITION_VARS * #
 
 variable "td_docker_image" {
