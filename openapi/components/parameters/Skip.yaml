@@ -1,0 +1,6 @@
+name: skip
+in: query
+schema:
+  type: number
+example:
+  2

@@ -7,6 +7,7 @@ from src.core.auth import scope
 from src.core.auth.deps import check_scopes
 from src.crud.post import post as crud
 from src.database.deps import get_db
+from src.models.post import Status
 from src.schemas.generics import ResponseAsList
 from src.schemas.post import Post, PostCreate, PostUpdate
 
@@ -35,14 +36,21 @@ def create_post(post: PostCreate, db: Annotated[Session, Depends(get_db)]) -> Po
 
 
 @router.get("")
-def get_posts(db: Annotated[Session, Depends(get_db)]) -> ResponseAsList[Post]:
-    posts = crud.get_multi(db)
+def get_posts(
+    db: Annotated[Session, Depends(get_db)],
+    skip: int = 0,
+    limit: int = 5,
+    status: Status = Status.published,
+) -> ResponseAsList[Post]:
+    posts = crud.get_multi(db, skip=skip, limit=limit, query={"status": status})
+    count = crud.count(db, query={"status": status})
 
     if not posts:
         posts = []
 
     return ResponseAsList(
         data=posts,
+        count=count,
     )
 
 

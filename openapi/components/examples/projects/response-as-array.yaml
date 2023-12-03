@@ -1,6 +1,5 @@
 data:
   - id: 1
-    status: active
     name: Amazing AWS Infrastructure
     image: https://cdn.yurb.dev/some-image
     url: https://some-project.yurb.dev
@@ -16,3 +15,4 @@ data:
     post_id: 2
     created_at: '2023-09-23T21:38:00Z'
     updated_at: '2023-09-23T21:38:00Z'
+count: 1

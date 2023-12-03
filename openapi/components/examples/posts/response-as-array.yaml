@@ -3,7 +3,7 @@ data:
     title: How to build a website 🤓👆
     author: Yurb, the developer
     slug: post-how-to-build-a-website
-    status: editing
+    status: draft
     description: This article discuses how to build a website
     content: |
       ## Nice Title
@@ -65,3 +65,4 @@ data:
     created_at: 2023-05-19T00:00:00Z
     updated_at: 2023-05-19T00:00:00Z
     published_at: 2023-05-21T00:00:00Z
+count: 1

@@ -21,7 +21,7 @@ def post() -> dict[str, Any]:
         "title": "How to deploy an AWS EC2 instance",
         "author": "Claudia Frazier",
         "slug": "post-how-to-build-a-website",
-        "status": "editing",
+        "status": "draft",
         "description": "This article discuses how to build a website",
         "content": "## Nice Title",
         "created_at": "2023-10-27T15:58:51.928350",
@@ -55,18 +55,23 @@ def override_auth() -> Generator[None, None, None]:
     app.dependency_overrides = {}
 
 
-class TestGetPostOperation:
+class TestGetPostsOperation:
     def test_return_all_posts(
         self,
         post: dict[str, Any],
         post_models: list[Post],
         monkeypatch: MonkeyPatch,
     ):
-        monkeypatch.setattr(CRUD, CRUD.get_multi.__name__, lambda _db: post_models)
+        monkeypatch.setattr(
+            CRUD, CRUD.get_multi.__name__, lambda _db, **_kargs: post_models
+        )
+        monkeypatch.setattr(
+            CRUD, CRUD.count.__name__, lambda _db, **_kargs: len(post_models)
+        )
 
         response = client.get(BASE_PATH)
 
-        assert response.json() == {"data": [post]}
+        assert response.json() == {"data": [post], "count": 1}
 
 
 class TestGetSinglePost:

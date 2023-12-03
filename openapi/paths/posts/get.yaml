@@ -9,13 +9,16 @@ description: |
 
   ### Query options
 
-  | option |   type   | default value |       possible values       |
-  |:------:|:--------:|:-------------:|:---------------------------:|
-  |  page  | `number` |       0       | 0-n \| `0 < n < page_count` |
-  |  limit | `number` |       5       |     5-n \| `5 < n <= 15`    |
+  | option  |   type         | default value |       possible values                |
+  |:-------:|:--------------:|:-------------:|:------------------------------------:|
+  |  skip   | `number`       |       0       | 0-n \| `0 < n < page_count`          |
+  |  limit  | `number`       |       5       |     5-n \| `5 < n <= 15`             |
+  |  status | `enum(status)` |   published   | `published` \| `draft` \| `archived` |
 security: []
 parameters:
-  $ref: ../../components/parameters/Pagination.yaml
+  - $ref: ../../components/parameters/Skip.yaml
+  - $ref: ../../components/parameters/Limit.yaml
+  - $ref: ../../components/parameters/PostStatus.yaml
 responses:
   200:
     description: The request was successfully handled.
@@ -28,6 +31,9 @@ responses:
               type: array
               items:
                 $ref: ../../components/schemas/Post.yaml
+            count:
+              type: number
+              description: The total number of posts.
         example:
           $ref: ../../components/examples/posts/response-as-array.yaml
   404:

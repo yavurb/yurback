@@ -20,13 +20,6 @@ properties:
       type: string
     description: |
       An array of tags of which the project is related.
-  status:
-    type: string
-    enum:
-      - active
-      - inactive
-    default: active
-    description: You must use a PATCH operation pointing to the resource in order to change the value of the field.
   post_id:
     type: number
     description: |

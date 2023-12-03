@@ -10,7 +10,7 @@ class PostBase(BaseModel):
     title: str
     author: str
     slug: str
-    status: Status = Status.editing
+    status: Status = Status.published
     description: str
     content: str
 

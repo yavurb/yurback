@@ -14,7 +14,7 @@ from typing import (
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, TypeAdapter, ValidationError
-from sqlalchemy import delete, select
+from sqlalchemy import delete, func, select
 from sqlalchemy import update as update_row
 from sqlalchemy.orm import Session
 
@@ -104,9 +104,15 @@ class CRUDBase(
         return model_schema if return_schema else row_instance
 
     def get_multi(
-        self, db: Session, *, skip: int = 0, limit: int = 100
+        self,
+        db: Session,
+        *,
+        skip: int = 0,
+        limit: int = 100,
+        query: Optional[QuerySchemaType] = None,
     ) -> Optional[list[ModelSchemaType]]:
-        stmt = select(self.model).offset(skip).limit(limit)
+        db_query = query or {}
+        stmt = select(self.model).filter_by(**db_query).offset(skip).limit(limit)
         rows = db.execute(stmt).scalars().all()
 
         if not rows:
@@ -160,3 +166,9 @@ class CRUDBase(
         except ValidationError as e:
             logging.error(e)
             return None
+
+    def count(self, db: Session, query: Optional[QuerySchemaType] = None) -> int:
+        db_query = query or {}
+
+        stmt = select(func.count()).select_from(self.model).filter_by(**db_query)
+        return db.execute(stmt).scalar()

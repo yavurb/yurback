@@ -16,10 +16,10 @@ properties:
   status:
     type: string
     enum:
-      - editing
-      - active
-      - inactive
-    default: editing
+      - published
+      - draft
+      - archived
+    default: published
   created_at:
     type: string
     format: date-time

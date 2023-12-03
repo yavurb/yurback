@@ -1,18 +1,11 @@
-import enum
 from datetime import datetime
 from typing import Optional
 
 from sqlalchemy import ForeignKey, String, func
-from sqlalchemy.dialects.postgresql import ARRAY, ENUM
+from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.database.base import Base
-
-
-class Status(enum.Enum):
-    editing = "editing"
-    active = "active"
-    inactive = "inactive"
 
 
 class Project(Base):
@@ -24,7 +17,6 @@ class Project(Base):
     url: Mapped[str]
     description: Mapped[str] = mapped_column(String(240))
     tags: Mapped[Optional[list[str]]] = mapped_column(ARRAY(String))
-    status: Mapped[Status] = mapped_column(ENUM(Status, name="status"))
     coming_soon: Mapped[bool] = mapped_column(default=False, nullable=True)
     created_at: Mapped[Optional[datetime]] = mapped_column(insert_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(

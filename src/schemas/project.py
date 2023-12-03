@@ -3,12 +3,9 @@ from typing import Optional, TypedDict
 
 from pydantic import BaseModel, ConfigDict
 
-from src.models.project import Status
-
 
 class ProjectBase(BaseModel):
     name: str
-    status: Status = Status.editing
     image: str
     url: str
     description: str
@@ -23,7 +20,6 @@ class ProjectCreate(ProjectBase):
 
 class ProjectUpdate(ProjectBase):
     name: Optional[str] = None
-    status: Optional[Status] = None
     image: Optional[str] = None
     url: Optional[str] = None
     description: Optional[str] = None
@@ -42,4 +38,4 @@ class Project(ProjectBase):
 class QuerySchema(TypedDict, total=False):
     id: int
     name: str
-    status: Status
+    coming_soon: bool

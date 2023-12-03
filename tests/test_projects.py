@@ -19,12 +19,12 @@ def project() -> dict[str, Any]:
     return {
         "id": 1,
         "name": "This website's backend",
-        "status": "editing",
         "image": "https://cdn.yurb.dev/catto.jpeg",
         "url": "https://api.yurb.dev/docs",
         "description": "A blog-like backend to serve content to yurb.dev 🐙",
         "tags": ["Python", "AWS", "FastAPI", "PostgreSQL"],
         "post_id": None,
+        "coming_soon": False,
         "created_at": "2023-10-27T15:58:51.928350",
         "updated_at": "2023-10-28T16:58:51.928350",
     }
@@ -63,10 +63,13 @@ class TestGetProjectsOperation:
         monkeypatch: MonkeyPatch,
     ):
         monkeypatch.setattr(CRUD, CRUD.get_multi.__name__, lambda _db: project_models)
+        monkeypatch.setattr(
+            CRUD, CRUD.count.__name__, lambda _db, **_kargs: len(project_models)
+        )
 
         response = client.get(BASE_PATH)
 
-        assert response.json() == {"data": [project]}
+        assert response.json() == {"data": [project], "count": None}
 
 
 class TestGetSingleProject:
@@ -94,9 +97,7 @@ class TestCreateProjectOperation:
             CRUD, CRUD.create.__name__, lambda _db, **kargs: project_models[0]
         )
         post_input = {**project}
-        exclude_keys(
-            post_input, ["id", "post_id", "status", "created_at", "updated_at"]
-        )
+        exclude_keys(post_input, ["id", "post_id", "created_at", "updated_at"])
 
         print(post_input)
 

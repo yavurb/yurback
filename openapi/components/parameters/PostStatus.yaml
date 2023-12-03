@@ -1,0 +1,9 @@
+name: status
+in: query
+schema:
+  type: string
+  enum:
+    - active
+    - editing
+  default: published
+example: published

@@ -1,6 +1,6 @@
 import enum
 from datetime import datetime
-from typing import Optional
+from typing import Literal, Optional
 
 from sqlalchemy import DateTime, String, Text, func
 from sqlalchemy.dialects.postgresql import ENUM
@@ -10,9 +10,9 @@ from src.database.base import Base
 
 
 class Status(enum.Enum):
-    editing = "editing"
-    active = "active"
-    inactive = "inactive"
+    draft = "draft"
+    published = "published"
+    archived = "archived"
 
 
 class Post(Base):
@@ -30,4 +30,6 @@ class Post(Base):
         insert_default=func.now(), onupdate=func.now()
     )
     published_at: Mapped[Optional[datetime]] = mapped_column(DateTime())
-    project: Mapped[Optional["Project"]] = relationship(back_populates="post")  # noqa
+    project: Mapped[Optional[Literal["Project"]]] = relationship(
+        back_populates="post"
+    )  # noqa

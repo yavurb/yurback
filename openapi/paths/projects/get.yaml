@@ -18,6 +18,9 @@ responses:
               type: array
               items:
                 $ref: ../../components/schemas/Project.yaml
+            count:
+              type: number
+              description: The total number of projects.
         example:
           $ref: ../../components/examples/projects/response-as-array.yaml
   404:
