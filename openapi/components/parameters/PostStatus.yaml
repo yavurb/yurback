@@ -1,9 +1,12 @@
 name: status
+description: |
+  The status of the posts to retrieve.
 in: query
 schema:
   type: string
   enum:
-    - active
-    - editing
+    - published
+    - draft
+    - archived
   default: published
 example: published

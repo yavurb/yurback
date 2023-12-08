@@ -2,4 +2,7 @@ name: limit
 in: query
 schema:
   type: number
+  maximum: 15
+  minimum: 1
+  default: 5
 example: 5

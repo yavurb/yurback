@@ -3,17 +3,8 @@ tags:
   - posts
 summary: Get all posts
 description: |
-  This operation gets all the existing posts.
-
-  the operation accepts a series of URL queries to manage pagination.
-
-  ### Query options
-
-  | option  |   type         | default value |       possible values                |
-  |:-------:|:--------------:|:-------------:|:------------------------------------:|
-  |  skip   | `number`       |       0       | 0-n \| `0 < n < page_count`          |
-  |  limit  | `number`       |       5       |     5-n \| `5 < n <= 15`             |
-  |  status | `enum(status)` |   published   | `published` \| `draft` \| `archived` |
+  Gets all the existing posts. By default, the operation returns only the published posts.
+  To get all the posts, use the `status` query parameter.
 security: []
 parameters:
   - $ref: ../../components/parameters/Skip.yaml

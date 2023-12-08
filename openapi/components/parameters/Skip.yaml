@@ -1,6 +1,16 @@
 name: skip
+description: |
+  The number of posts to skip.
+
+  The maximum value is the value of the `count` property returned by the operation subtracted by the number of posts to retrieve.
+
+  For example, if the operation returns 10 posts and the `limit` query parameter is set to 5, the maximum value of the `skip` query parameter is 5.
+
+  maxValue = count - limit
 in: query
 schema:
   type: number
+  minimum: 0
+  default: 0
 example:
   2

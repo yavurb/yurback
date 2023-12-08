@@ -1,6 +1,6 @@
 openapi:  3.1.0
 info:
-  title: Yavurb
+  title: Yurback
   version: 0.1.0
   summary: Yurb personal website's API
   description: |
