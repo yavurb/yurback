@@ -31,6 +31,7 @@ variable "domains" {
     main_fqdn = string
     cdn_fqdn  = string
     api_fqdn  = string
+    docs_hub_fqdn = string
   })
 }
 
@@ -39,6 +40,10 @@ variable "frontend_records" {
     main_fqdn = string
     www       = string
   })
+}
+
+variable "docs_hub_record" {
+  type = string
 }
 
 # * CDN_VARS * #

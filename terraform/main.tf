@@ -82,6 +82,16 @@ resource "aws_acm_certificate_validation" "validate_records" {
   validation_record_fqdns = [for record in cloudflare_record.main_records : record.hostname]
 }
 
+# --- API Docs HUB record ---- #
+
+resource "cloudflare_record" "docs_hub_record" {
+  zone_id = data.cloudflare_zone.main_domain.id
+  name    = var.domains.docs_hub_fqdn
+  type    = "CNAME"
+  value   = var.docs_hub_record
+  ttl     = 300
+}
+
 # --- Frontend Resources ---- #
 
 resource "cloudflare_record" "main_frontend_records" {
