@@ -1,11 +1,11 @@
-ARG python=python:3.11-alpine
+ARG python=python:3.12-alpine
 
 FROM ${python} as build
 
-RUN apk update \
-    && apk add gcc musl-dev \
-    && apk add libpq-dev \
-    && apk add libffi-dev
+RUN apk add --no-cache \
+    build-base \
+    libpq-dev \
+    libffi-dev
 
 RUN pip install -U pip setuptools wheel
 RUN pip install pdm
@@ -17,7 +17,7 @@ RUN pdm sync --prod --no-editable
 
 FROM ${python}
 
-RUN apk add libpq-dev
+RUN apk add --no-cache libpq-dev
 
 WORKDIR /app
 

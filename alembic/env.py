@@ -1,9 +1,9 @@
-import os
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config, pool
 
 from alembic import context
+from src.core.config import settings
 from src.models.base import Base
 
 # this is the Alembic Config object, which provides
@@ -28,7 +28,7 @@ target_metadata = Base.metadata
 
 
 def get_url():
-    return os.getenv("DATABASE_URI")
+    return settings.database_uri
 
 
 def run_migrations_offline() -> None:
