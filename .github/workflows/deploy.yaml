@@ -18,6 +18,7 @@ env:
 
 jobs:
   deploy:
+    if: false
     name: Deploy Yurback to Cloud Run
     runs-on: ubuntu-latest
     environment: production
